@@ -9,9 +9,15 @@ from api import views
 app_name = 'api'
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet, base_name='user')
+router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-
+router.register(r'schools', views.SchoolViewSet)
+router.register(r'teachers', views.TeacherViewSet)
+router.register(r'students', views.StudentViewSet)
+router.register(r'classes', views.ClassViewSet)
+router.register(r'subjects', views.SubjectViewSet)
+router.register(r'teacher_class_subject', views.TeacherClassSubjectViewSet)
+router.register(r'checkins', views.CheckinViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
