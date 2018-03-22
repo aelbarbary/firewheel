@@ -60,7 +60,7 @@ LOGGING = {
         'larayblogfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(DJANGO_ROOT, 'LARAYB.log'),
+            'filename': os.path.join(BASE_DIR, 'LARAYB.log'),
             'maxBytes': 1024*1024*15, # 15MB
             'backupCount': 10,
         },
