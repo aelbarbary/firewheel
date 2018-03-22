@@ -56,14 +56,25 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
             'filters': []
-        }
+        },
+        'larayblogfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(DJANGO_ROOT, 'LARAYB.log'),
+            'maxBytes': 1024*1024*15, # 15MB
+            'backupCount': 10,
+        },
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': False,
-        }
+        },
+        'LARAYB': {
+            'handlers': ['larayblogfile',],
+            'level': 'DEBUG',
+        },
     }
 }
 
