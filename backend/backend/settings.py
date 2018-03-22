@@ -22,11 +22,50 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '7hs_bx$@wnvo10qk(!89)p$ry%)&qx+es(a$5_8bq&-%_yp()7'
 
+ADMINS =(('admin','abdelrahman.elbarbary@gmail.com'),)
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+SERVER_EMAIL = 'xyz@gmail.com'
+EMAIL_HOST_USER = os.environ['LARAYB_EMAIL']
+EMAIL_HOST_PASSWORD = os.environ['LARAYB_PASSWORD']
+EMAIL_PORT = 587
+SEND_BROKEN_LINK_EMAILS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': u"%(asctime)s [%(levelname)-8s] %(message)s",
+            'datefmt': "%Y-%m-%d %H:%M:%S"
+        },
+        'aws': {
+            # you can add specific format for aws here
+            'format': u"%(asctime)s [%(levelname)-8s] %(message)s",
+            'datefmt': "%Y-%m-%d %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': []
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        }
+    }
+}
 
 # Application definition
 
