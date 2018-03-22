@@ -4,3 +4,4 @@ Pillow
 django-storages
 django-registration
 boto3
+rest_framework
