@@ -11,13 +11,8 @@ app_name = 'api'
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'schools', views.SchoolViewSet)
-router.register(r'teachers', views.TeacherViewSet)
-router.register(r'students', views.StudentViewSet)
-router.register(r'classes', views.ClassViewSet)
-router.register(r'subjects', views.SubjectViewSet)
-router.register(r'teacher_class_subject', views.TeacherClassSubjectViewSet)
-router.register(r'checkins', views.CheckinViewSet)
+router.register(r'providers', views.ProviderViewSet)
+router.register(r'offers', views.OfferViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [

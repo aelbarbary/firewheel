@@ -6,6 +6,6 @@ sudo easy_install3 pip
 pip3 install Django
 pip3 install psycopg2
 pip3 install Pillow
-pip3 install django-storages
-pip3 install boto
+pip3 install boto3
 pip3 install django-registration
+djangorestframework
