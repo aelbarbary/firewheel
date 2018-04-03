@@ -30,10 +30,10 @@ class Header extends Component {
           Home
         </Link>
         <Link onlyActiveOnIndex={true} key={2} to="/profile" activeClassName="activeNavLink" className="navLink">
-          Profile
+          Providers
         </Link>
         <Link onlyActiveOnIndex={true} key={3} to="/trades" activeClassName="activeNavLink" className="navLink">
-          Trades
+          Offers
         </Link>
         <Link onlyActiveOnIndex={true} key={4} to="/login" activeClassName="activeNavLink" className="navLink">
           Login
@@ -91,7 +91,7 @@ class Header extends Component {
       <header className="header">
         <h1>
           <Link onlyActiveOnIndex={true} to="/" className="logo">
-            LARAYB 2
+            LARAYB
           </Link>
         </h1>
         {this.state.menuActive ? this.menuButton: ""}
