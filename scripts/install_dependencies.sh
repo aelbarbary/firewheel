@@ -8,4 +8,4 @@ pip3 install psycopg2
 pip3 install Pillow
 pip3 install boto3
 pip3 install django-registration
-djangorestframework
+pip3 install djangorestframework
