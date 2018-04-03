@@ -4,5 +4,4 @@ sudo systemctl restart nginx
 sudo kill -9 $(sudo lsof -t -i:8004)
 sudo uwsgi --chdir /home/ubuntu/www/larayb/backend --socket :8004 --module backend.wsgi > /dev/null 2>&1 &
 
-npm install --prefix /home/ubuntu/www/larayb/frontend
-npm run build --prefix /home/ubuntu/www/larayb/frontend
+yarn run build --prefix /home/ubuntu/www/larayb/frontend
