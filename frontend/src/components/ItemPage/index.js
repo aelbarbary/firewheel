@@ -25,7 +25,7 @@ class ItemPage extends Component {
           <p className="description">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea nulla modi, odit explicabo hic doloremque commodi ab molestiae. Iure voluptatem labore et aliquid soluta inventore expedita quam vel a earum!
           </p>
-          <p className="seller frm">By <span>Arshad Khan</span></p>
+          <p className="seller frm">By <span>Abdelrahman Elbarbary</span></p>
           <button className="reqTradeBtn normalBtn">Request Trade</button>
         </div>
       </div>
