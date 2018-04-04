@@ -1,15 +1,13 @@
 # mysite_nginx.conf
 
-
 # the upstream component nginx needs to connect to
 upstream django {
     # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
     server 127.0.0.1:8003; # for a web port socket (we'll use this first)
 }
 
-upstream django-larayb {
-    # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
-    server 127.0.0.1:8004; # for a web port socket (we'll use this first)
+upstream larayb-backend {
+    server 127.0.0.1:8004;
 }
 
 # configuration of the server
@@ -39,13 +37,24 @@ server {
         include     /home/ubuntu/www/tamkeen/app/uwsgi_params; # the uwsgi_params file you installed
     }
 
-    location /larayb {
-        uwsgi_pass  django-larayb;
-        include     /home/ubuntu/www/larayb/backend/uwsgi_params; # the uwsgi_params file you installed
-    }
-
-
     ssl_certificate /etc/letsencrypt/live/tamkeen.us-0002/fullchain.pem; # mana$
     ssl_certificate_key /etc/letsencrypt/live/tamkeen.us-0002/privkey.pem; # ma$
 
- }
+}
+
+server {
+   listen 80 default_server;
+   root /home/ubuntu/www/larayb/frontend/dist;
+   server_name www.larayb.com larayb.com ;
+   index index.html index.htm;
+
+   location /api/ {
+        rewrite ^/api/(.*) /$1  break;
+        uwsgi_param SCRIPT_NAME /api;
+        include     /home/ubuntu/www/larayb/backend/uwsgi_params;
+        uwsgi_pass  larayb-backend;
+     }
+
+     location / {
+   }
+}

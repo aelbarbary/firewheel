@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-
 import './styles.sass';
+// import logo from './../../assets/images/logo.png';
 
 class Header extends Component {
 
@@ -90,6 +90,7 @@ class Header extends Component {
     return (
       <header className="header">
         <h1>
+          {/* <img src={logo} width="200px"/> */}
           <Link onlyActiveOnIndex={true} to="/" className="logo">
             LARAYB
           </Link>
