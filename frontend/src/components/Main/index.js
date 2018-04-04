@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './styles.sass';
 import Item from '../Item/index';
-import Background from '../Background/index'
 
 class Homepage extends Component {
 
