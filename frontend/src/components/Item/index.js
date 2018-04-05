@@ -11,7 +11,7 @@ class Item extends Component {
       <div className="item">
 
         <div className="content" onClick={()=>{
-          browserHistory.push('/item/123');
+          browserHistory.push(this.props.urlProp);
         }}>
         <img src={this.props.imageProp} />
         </div>

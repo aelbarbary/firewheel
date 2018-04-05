@@ -65,13 +65,12 @@ import uuid
 #     date_time = models.DateField(max_length=8, blank=True, default = datetime.now)
 
 class Provider(models.Model):
-    id = models.UUIDField(primary_key=True, editable=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     website = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
-    profile_pic_url = models.CharField(max_length=2000)
+    picture = models.CharField(max_length=2000)
     tags = models.CharField(max_length=2000)
     address_line = models.CharField(max_length=200)
     state = models.CharField(max_length=200)
@@ -83,9 +82,8 @@ class Provider(models.Model):
         return 'Name: %s %s' % ( self.first_name, self.last_name )
 
 class Offer(models.Model):
-    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     title = models.CharField(max_length=2000)
-    pic_url = models.CharField(max_length=200)
+    picture = models.CharField(max_length=200)
     cost = models.IntegerField(default = 0)
     provider = models.ForeignKey(Provider, related_name='offers', on_delete=models.CASCADE)
     def __str__(self):

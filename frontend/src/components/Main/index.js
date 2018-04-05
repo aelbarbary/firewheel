@@ -19,13 +19,13 @@ class Homepage extends Component {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
 
-    fetch ('https://randomuser.me/api?results=100')
+    fetch ('http://localhost:8000/offers/')
     .then(results => {
       return results.json();
     }).then(data=> {
-      let offers = data.results.map((pic) => {
+      let offers = data.map((offer) => {
         return(
-            <Item imageProp={pic.picture.large}/>
+            <Item imageProp={offer.picture} urlProp={'item/' + offer.id}/>
         );
       });
 

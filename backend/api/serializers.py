@@ -30,15 +30,15 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class OfferSerializer(serializers.HyperlinkedModelSerializer):
     # url = serializers.HyperlinkedIdentityField(view_name="api:offer-detail")
     # provider = ProviderSerializer(read_only=False)
-    provider_id = serializers.UUIDField(source='provider.id')
+    provider_id = serializers.IntegerField(source='provider.id')
     class Meta:
         model = Offer
-        fields = ('id', 'provider_id', 'title', 'pic_url', 'cost')
+        fields = ('provider_id', 'title', 'picture', 'cost')
 
     def create(self, validated_data):
             print(validated_data)
             new_offer = Offer.objects.create(title=validated_data['title'],
-                                             pic_url=validated_data['pic_url'],
+                                             picture=validated_data['picture'],
                                              cost=validated_data['cost'],
                                              provider_id=validated_data['provider']['id'])
             return new_offer
@@ -46,16 +46,15 @@ class OfferSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProviderSerializer(serializers.HyperlinkedModelSerializer):
     # url = serializers.HyperlinkedIdentityField(view_name="api:provider-detail")
-    id = serializers.UUIDField(required=True, read_only=False)
     offers = OfferSerializer(many=True, read_only=True)
     class Meta:
         model = Provider
-        fields = ('id','first_name'
+        fields = ('first_name'
                         , 'last_name'
                         , 'website'
                         , 'email'
                         , 'phone'
-                        , 'profile_pic_url'
+                        , 'picture'
                         , 'tags'
                         , 'address_line'
                         , 'state'
