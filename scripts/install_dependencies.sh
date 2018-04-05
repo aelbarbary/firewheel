@@ -10,3 +10,4 @@ pip3 install boto3
 pip3 install django-registration
 pip3 install djangorestframework
 pip3 install django-cors-headers
+pip3 install coreapi

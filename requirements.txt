@@ -6,3 +6,4 @@ django-registration
 boto3
 djangorestframework
 django-cors-headers
+coreapi
