@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import './styles.sass';
 import Item from '../Item/index';
+import { login } from '../../util/Auth';
+// import store from '../../store';
 
 class Homepage extends Component {
 
   constructor() {
     super();
+
     this.state = {
-      offers: []
+      offers: [],
+      token: ''
     };
   }
 
@@ -24,8 +28,9 @@ class Homepage extends Component {
             <Item imageProp={pic.picture.large}/>
         );
       });
+
+      login("admin", "P@ssw0rd");
       this.setState ({ offers: offers});
-      // console.log("state", this.state.pictures);
     });
   }
 

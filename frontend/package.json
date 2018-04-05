@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "autoprefixer": "6.5.4",
+    "axios": "0.18.0",
     "babel-cli": "6.18.0",
     "babel-core": "6.20.0",
     "babel-eslint": "7.1.1",
@@ -86,6 +87,8 @@
     "prompt": "1.0.0",
     "react-addons-test-utils": "15.4.1",
     "redux-immutable-state-invariant": "1.2.4",
+    "redux-logger": "3.0.6",
+    "redux-persist": "5.9.1",
     "replace": "0.3.0",
     "rimraf": "2.5.4",
     "sass-loader": "4.1.0",
