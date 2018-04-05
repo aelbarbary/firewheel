@@ -5,3 +5,4 @@ django-storages
 django-registration
 boto3
 djangorestframework
+corsheaders
