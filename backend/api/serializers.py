@@ -28,12 +28,12 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class OfferSerializer(serializers.HyperlinkedModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(view_name="api:offer-detail")
+    url = serializers.HyperlinkedIdentityField(view_name="api:offer-detail")
     # provider = ProviderSerializer(read_only=False)
     provider_id = serializers.IntegerField(source='provider.id')
     class Meta:
         model = Offer
-        fields = ('provider_id', 'title', 'picture', 'cost')
+        fields = ('url', 'provider_id', 'title', 'picture', 'cost')
 
     def create(self, validated_data):
             print(validated_data)
@@ -43,6 +43,14 @@ class OfferSerializer(serializers.HyperlinkedModelSerializer):
                                              provider_id=validated_data['provider']['id'])
             return new_offer
 
+    def update(self, instance, validated_data):
+            print(validated_data)
+            instance.title = validated_data['title']
+            instance.picture=validated_data['picture']
+            instance.cost=validated_data['cost']
+            instance.provider_id=validated_data['provider']['id']
+            instance.save()
+            return instance
 
 class ProviderSerializer(serializers.HyperlinkedModelSerializer):
     # url = serializers.HyperlinkedIdentityField(view_name="api:provider-detail")
