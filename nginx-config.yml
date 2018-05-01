@@ -55,6 +55,11 @@ server {
         uwsgi_pass  larayb-backend;
      }
 
-     location / {
+
+   location /static {
+       alias /home/ubuntu/www/larayb/backend/static; # your Django project's static files - amend as required
+   }
+
+   location / {
    }
 }
