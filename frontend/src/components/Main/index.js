@@ -3,6 +3,7 @@ import './styles.sass';
 import Item from '../Item/index';
 import { login } from '../../util/Auth';
 // import store from '../../store';
+import { API_ROOT } from '../../../api-config';
 
 class Homepage extends Component {
 
@@ -19,7 +20,7 @@ class Homepage extends Component {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
 
-    fetch ('http://localhost:8000/offers/')
+    fetch (`${API_ROOT}/offers/`)
     .then(results => {
       return results.json();
     }).then(data=> {
