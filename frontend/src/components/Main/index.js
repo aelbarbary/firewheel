@@ -26,7 +26,8 @@ class Homepage extends Component {
     }).then(data=> {
       let offers = data.map((offer) => {
         return(
-            <Item imageProp={offer.picture} urlProp={'item/' + offer.id}/>
+
+            <Item key={offer.id} imageProp={offer.picture} urlProp={'item/' + offer.id}/>
         );
       });
 
@@ -37,9 +38,9 @@ class Homepage extends Component {
 
   render() {
     return (
-      <main className="main">
+      <div className="main">
         {this.state.offers}
-      </main>
+      </div>
 
     );
   }

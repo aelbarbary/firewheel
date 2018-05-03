@@ -7,30 +7,37 @@ import Footer from '../Footer/index';
 import './styles.sass';
 import '../../styles/animation.sass';
 
-import { Route } from 'react-router';
+import { withRouter } from 'react-router';
+import { Switch, Route} from 'react-router-dom'
 
-import Main from './../Main/index';
-import Profile from './../Profile/index';
-import Login from './../Login/index';
-import Trades from './../Trades/index';
-import ItemPage from './../ItemPage/index';
-import MyItems from './../MyItems/index';
-import ErrorPage from './../ErrorPage/index';
+import Main from '../Main/index';
+import Profile from '../Profile/index';
+import Login from '../Login/index';
+import Trades from '../Trades/index';
+import ItemPage from '../ItemPage/index';
+import MyItems from '../MyItems/index';
+import ErrorPage from '../ErrorPage/index';
+
 
 
 class App extends Component {
   render() {
+
     return (
       <div className="wrapper">
         <Header />
-        <Route exact path="/" component={Main} />
-        <Route path="item/:id" component={ItemPage} />
-        <Route path="profile" component={Profile} />
-        <Route path="login" component={Login} />
-        <Route path="trades" component={Trades} />
-        <Route path="myItems" component={MyItems} />
-        <Route path="*" component={ErrorPage} />
+        <Switch>
+          <Route exact path="/" component={Main} />
+          <Route path="/item/:id" component={ItemPage} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/login" component={Login} />
+          <Route path="/trades" component={Trades} />
+          <Route path="/myItems" component={MyItems} />
+          <Route path="*" component={ErrorPage} />
+        </Switch>
+
         <Footer />
+
       </div>
       // <div className="wrapper">
       //   <Header />
@@ -53,8 +60,7 @@ class App extends Component {
 
 App.propTypes = {
   children: PropTypes.element,
-  location: PropTypes.object,
-  "location.pathname": PropTypes.string
+  location: PropTypes.object.isRequired
 };
 
-export default App;
+export default withRouter(App);

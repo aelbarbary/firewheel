@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+// import { Link } from 'react-router-dom';
 import './styles.sass';
 
 class ProposedTrade extends Component {
@@ -9,7 +9,7 @@ class ProposedTrade extends Component {
         <div className="upper">
           <div className="userImg" />
           <h4>
-            You have proposed <Link>Abdelrahman ElBarbary</Link> for trading <Link>Eloquent Javascript</Link>
+            {/* You have proposed <Link>Abdelrahman ElBarbary</Link> for trading <Link>Eloquent Javascript</Link> */}
           </h4>
         </div>
         <div className="tradeBtnWrapper lower">

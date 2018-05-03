@@ -33,7 +33,7 @@ class OfferSerializer(serializers.HyperlinkedModelSerializer):
     provider_id = serializers.IntegerField(source='provider.id')
     class Meta:
         model = Offer
-        fields = ('url', 'provider_id', 'title', 'picture', 'cost')
+        fields = ('url', 'id', 'provider_id', 'title', 'picture', 'cost')
 
     def create(self, validated_data):
             print(validated_data)
