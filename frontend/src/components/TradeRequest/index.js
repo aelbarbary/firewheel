@@ -9,7 +9,7 @@ class TradeRequest extends Component {
         <div className="upper">
           <div className="userImg" />
           <h4>
-            <Link>Arshad Khan</Link> wants to trade with your item- <Link>Eloquent Javascript</Link>
+            <Link>Abdelrahman </Link> wants to trade with your item- <Link>Eloquent Javascript</Link>
           </h4>
         </div>
         <div className="tradeBtnWrapper lower">

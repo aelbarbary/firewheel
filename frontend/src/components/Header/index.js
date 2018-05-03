@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import './styles.sass';
 // import logo from './../../assets/images/logo.png';
 
@@ -26,16 +26,16 @@ class Header extends Component {
 
     this.loggedInMenu = (
       <div className="menu">
-        <Link onlyActiveOnIndex={true} key={1} to="/" activeClassName="activeNavLink" className="navLink">
+        <Link  key={1} to="/"  className="navLink">
           Home
         </Link>
         {/* <Link onlyActiveOnIndex={true} key={2} to="/profile" activeClassName="activeNavLink" className="navLink">
           Providers
         </Link> */}
-        <Link onlyActiveOnIndex={true} key={3} to="/trades" activeClassName="activeNavLink" className="navLink">
+        <Link  key={3} to="/trades"  className="navLink">
           Offers
         </Link>
-        <Link onlyActiveOnIndex={true} key={4} to="/login" activeClassName="activeNavLink" className="navLink">
+        <Link key={4} to="/login" className="navLink">
           Login
         </Link>
       </div>
@@ -43,7 +43,7 @@ class Header extends Component {
 
     this.loggedOutMenu = (
       <div className="menu loginMenu">
-        <Link onlyActiveOnIndex={true} key={5} activeClassName="activeNavLink" className="navLink">
+        <Link key={5} className="navLink" to="/" >
           LogIn / Sign Up
         </Link>
       </div>
@@ -91,7 +91,7 @@ class Header extends Component {
       <header className="header">
         <h1>
           {/* <img src={logo} width="200px"/> */}
-          <Link onlyActiveOnIndex={true} to="/" className="logo">
+          <Link to="/" className="logo">
             LARAYB
           </Link>
         </h1>

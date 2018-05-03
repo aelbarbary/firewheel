@@ -1,4 +1,5 @@
-import React, { Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import './styles.sass';
 
@@ -30,9 +31,8 @@ class UserItem extends Component {
   }
 }
 
-export default UserItem;
-
 UserItem.propTypes = {
   editModal: PropTypes.func
 };
 
+export default UserItem;
