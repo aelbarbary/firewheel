@@ -18,14 +18,23 @@ import ItemPage from '../ItemPage/index';
 import MyItems from '../MyItems/index';
 import ErrorPage from '../ErrorPage/index';
 
+import Auth from '../../Auth/Auth.js';
+import Callback from '../../Callback/Callback';
 
+const auth = new Auth();
+
+const handleAuthentication = (nextState) => {
+  if (/access_token|id_token|error/.test(nextState.location.hash)) {
+    auth.handleAuthentication();
+  }
+}
 
 class App extends Component {
   render() {
 
     return (
       <div className="wrapper">
-        <Header />
+        <Header auth={auth} />
         <Switch>
           <Route exact path="/" component={Main} />
           <Route path="/item/:id" component={ItemPage} />
@@ -33,27 +42,18 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/trades" component={Trades} />
           <Route path="/myItems" component={MyItems} />
-          <Route path="*" component={ErrorPage} />
+
+          <Route path="/callback" render={(props) => {
+             console.log("test");
+             handleAuthentication(props);
+             return <Callback {...props} />
+           }}/>
+           <Route path="*" component={ErrorPage} />
         </Switch>
 
         <Footer />
 
       </div>
-      // <div className="wrapper">
-      //   <Header />
-      //   <ReactCSSTransitionGroup
-      //     transitionName="content"
-      //     transitionEnterTimeout={500}
-      //     transitionLeaveTimeout={300}>
-      //     <div key={this.props.location.pathname}>
-      //       {this.props.children}
-      //       <Footer />
-      //     </div>
-      //   </ReactCSSTransitionGroup>
-      // </div>
-      // <div>
-      //   <Header />
-      // </div>
     );
   }
 }

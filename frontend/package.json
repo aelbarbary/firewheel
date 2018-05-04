@@ -29,6 +29,7 @@
   "author": "Arshad Khan <arshdkhn1@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "auth0-js": "9.5.1",
     "babel-eslint": "8.2.3",
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",

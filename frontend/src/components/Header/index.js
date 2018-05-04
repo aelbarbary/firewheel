@@ -5,6 +5,18 @@ import './styles.sass';
 
 class Header extends Component {
 
+  goTo(route) {
+    this.props.history.replace(`/${route}`)
+  }
+
+  login() {
+    this.props.auth.login();
+  }
+
+  logout() {
+    this.props.auth.logout();
+  }
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -43,7 +55,7 @@ class Header extends Component {
 
     this.loggedOutMenu = (
       <div className="menu loginMenu">
-        <Link key={5} className="navLink" to="/" >
+        <Link key={5} className="navLink" to="/login" onClick={this.login.bind(this)} >
           LogIn / Sign Up
         </Link>
       </div>
@@ -77,9 +89,10 @@ class Header extends Component {
   }
 
   setNav() {
+    const { isAuthenticated } = this.props.auth;
+    console.log(isAuthenticated());
     // check for auth here
-    const True = true;
-    if (True) {
+    if (isAuthenticated()) {
       this.setState({ nav: this.loggedInMenu });
     } else {
       this.setState({ nav: this.loggedOutMenu });
@@ -87,6 +100,9 @@ class Header extends Component {
   }
 
   render() {
+
+
+
     return (
       <header className="header">
         <h1>
