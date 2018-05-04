@@ -47,8 +47,8 @@ class Header extends Component {
         <Link  key={3} to="/trades"  className="navLink">
           Offers
         </Link>
-        <Link key={4} to="/login" className="navLink">
-          Login
+        <Link key={4} to="/login" className="navLink" onClick={this.logout.bind(this)}>
+          Logout
         </Link>
       </div>
     );
