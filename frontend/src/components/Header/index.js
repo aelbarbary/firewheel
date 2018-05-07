@@ -11,10 +11,14 @@ class Header extends Component {
 
   login() {
     this.props.auth.login();
+    console.log("calling force update");
+    this.forceUpdate();
   }
 
   logout() {
     this.props.auth.logout();
+    console.log("calling force update");
+    this.forceUpdate();
   }
 
   constructor(props) {
@@ -47,7 +51,7 @@ class Header extends Component {
         <Link  key={3} to="/trades"  className="navLink">
           Offers
         </Link>
-        <Link key={4} to="/login" className="navLink" onClick={this.logout.bind(this)}>
+        <Link key={4} to="#" className="navLink" onClick={this.logout.bind(this)}>
           Logout
         </Link>
       </div>
@@ -55,7 +59,7 @@ class Header extends Component {
 
     this.loggedOutMenu = (
       <div className="menu loginMenu">
-        <Link key={5} className="navLink" to="/login" onClick={this.login.bind(this)} >
+        <Link key={5} className="navLink" to="#" onClick={this.login.bind(this)} >
           LogIn / Sign Up
         </Link>
       </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './styles.sass';
+import { API_ROOT } from '../../../api-config';
 
 class ItemPage extends Component {
   componentDidMount() {
@@ -8,9 +9,20 @@ class ItemPage extends Component {
     document.querySelector('.menu').classList.remove('open');
   }
   render() {
+    var itemId = this.props.match.params.id;
+    fetch (`${API_ROOT}/offers/${itemId}`)
+    .then(results => {
+
+      return results.json();
+    }).then(data=> {
+      var offer = data;
+      this.setState ({ offer: data});
+    });
     return (
       <div className="itemPageWrapper">
-        <div className="itemImgWrapper" />
+        <div className="itemImgWrapper content" >
+          <img src={this.state.offer.picture} />
+        </div>
         <div className="itemInfoWrapper">
           <Link className="backLink" to="/">
             <span className="small">
@@ -20,13 +32,13 @@ class ItemPage extends Component {
               </svg>
             </span>All Items
           </Link>
-          <h3 className="itemName">Eloquent Javascript</h3>
-          <p className="itemCost frm">$40</p>
+          <h3 className="itemName">{this.state.offer.title}</h3>
+          <p className="itemCost frm">${this.state.offer.cost}</p>
           <p className="description">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea nulla modi, odit explicabo hic doloremque commodi ab molestiae. Iure voluptatem labore et aliquid soluta inventore expedita quam vel a earum!
+            {this.state.offer.description}
           </p>
-          <p className="seller frm">By <span>Abdelrahman Elbarbary</span></p>
-          <button className="reqTradeBtn normalBtn">Request Trade</button>
+          <p className="seller frm">By <span>{this.state.offer.provider}</span></p>
+          <button className="reqTradeBtn normalBtn">Contact</button>
         </div>
       </div>
     );
