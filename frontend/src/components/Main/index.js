@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './styles.sass';
 import Item from '../Item/index';
-import { login } from '../../util/Auth';
 // import store from '../../store';
 import { API_ROOT } from '../../../api-config';
 
@@ -31,7 +30,6 @@ class Homepage extends Component {
         );
       });
 
-      login("admin", "P@ssw0rd");
       this.setState ({ offers: offers});
     });
   }

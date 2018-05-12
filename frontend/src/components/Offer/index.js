@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import './styles.sass';
 
-class UserItem extends Component {
+class Offer extends Component {
   constructor(props) {
     super(props);
   }
@@ -12,14 +12,16 @@ class UserItem extends Component {
     return (
       <div className="uIWrapper">
         <div className="upper">
-          <div className="userImg" />
+          <div className="userImg" >
+            <img src={this.props.offer.picture}/>
+          </div>
           <div className="itemInfo">
             <h3 className="itemName">
-              <Link to="item/1234">Eloquent Javascript</Link>
+              <Link to="item/1234">{this.props.offer.name}</Link>
             </h3>
-            <p className="itemCost frm">$40</p>
-            <p className="addDate frm">23 Jan, 2017</p>
-            <p className="itemDescription">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque nihil dicta temporibus incidunt fugit culpa similique ipsum sit? Hic ad beatae quidem repudiandae dignissimos tenetur consequuntur, ullam, accusantium earum at.</p>
+            <p className="itemCost frm">{this.props.offer.cost}</p>
+            <p className="addDate frm">{this.props.offer.date}</p>
+            <p className="itemDescription">{this.props.offer.description}</p>
             <div className="tradeBtnWrapper lower">
               <button className="deleteBtn normalBtn">Remove Item</button>
               <button className="editBtn normalBtn" onClick={this.props.editModal}>Edit Info</button>
@@ -31,8 +33,8 @@ class UserItem extends Component {
   }
 }
 
-UserItem.propTypes = {
+Offer.propTypes = {
   editModal: PropTypes.func
 };
 
-export default UserItem;
+export default Offer;

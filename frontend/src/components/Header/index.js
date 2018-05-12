@@ -11,14 +11,10 @@ class Header extends Component {
 
   login() {
     this.props.auth.login();
-    console.log("calling force update");
-    this.forceUpdate();
   }
 
   logout() {
     this.props.auth.logout();
-    console.log("calling force update");
-    this.forceUpdate();
   }
 
   constructor(props) {
@@ -48,10 +44,10 @@ class Header extends Component {
         {/* <Link onlyActiveOnIndex={true} key={2} to="/profile" activeClassName="activeNavLink" className="navLink">
           Providers
         </Link> */}
-        <Link  key={3} to="/trades"  className="navLink">
-          Offers
+        <Link  key={2} to="/myOffers"  className="navLink">
+          My Offers
         </Link>
-        <Link key={4} to="#" className="navLink" onClick={this.logout.bind(this)}>
+        <Link key={3} to="#" className="navLink" onClick={this.logout.bind(this)}>
           Logout
         </Link>
       </div>

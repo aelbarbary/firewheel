@@ -7,17 +7,18 @@ class ItemPage extends Component {
   componentDidMount() {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
-  }
-  render() {
+
     var itemId = this.props.match.params.id;
     fetch (`${API_ROOT}/offers/${itemId}`)
     .then(results => {
 
       return results.json();
     }).then(data=> {
-      var offer = data;
       this.setState ({ offer: data});
     });
+  }
+
+  render() {
     return (
       <div className="itemPageWrapper">
         <div className="itemImgWrapper content" >
@@ -37,7 +38,7 @@ class ItemPage extends Component {
           <p className="description">
             {this.state.offer.description}
           </p>
-          <p className="seller frm">By <span>{this.state.offer.provider}</span></p>
+          <p className="seller frm">By <span>{this.state.offer.provider_name}</span></p>
           <button className="reqTradeBtn normalBtn">Contact</button>
         </div>
       </div>

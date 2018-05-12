@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { API_ROOT } from '../../../api-config';
 import './styles.sass';
 
 class AddItemPage extends Component {
@@ -17,12 +17,26 @@ class AddItemPage extends Component {
   close() {
     this.modalWrapper.classList.remove(this.props.openClass);
     setTimeout(() => {
+      console.log(this.props);
       this.props.close();
     }, 850);
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    let data = new FormData(event.target);
+
+    fetch(`${API_ROOT}/offers/`, {
+      method: 'POST',
+      body: data,
+    });
+
+    this.props.close();
+  }
+
   render() {
     return (
+      <form onSubmit={this.handleSubmit.bind(this)}>
       <div className="addItemWrapper" ref={node => { this.modalWrapper = node; }}>
         <div className="hider" />
         <div className="modal">
@@ -33,25 +47,30 @@ class AddItemPage extends Component {
             <div className="itemPicWrapper">
               <div className="img" />
               <p className="imgText frm">Upload Item Picture</p>
+              <input id="title" name="picture" type="text" className="itemName" placeholder="Enter Name" value="test" />
             </div>
             <div className="itemInfoWrapper">
               <div className="inputWrapper">
-                <label htmlFor="itemName">Name:</label>
-                <input id="itemName" name="itemName" type="text" className="itemName" placeholder="Enter Name" required />
+                <label htmlFor="title">Provider:</label>
+                <input id="provider_id" name="provider_id" type="text" className="itemName" placeholder="Enter Name" value="1" />
+              </div>
+              <div className="inputWrapper">
+                <label htmlFor="title">Name:</label>
+                <input id="title" name="name" type="text" className="itemName" placeholder="Enter Name" required />
               </div>
               <div className="priceWrapper">
                 <div className="inputWrapper">
                   <label htmlFor="itemPrice">Price:</label>
-                  <input min="0" id="itemPrice" name="itemPrice" type="number" className="itemPrice" placeholder="Enter Price" required />
+                  <input min="0" id="itemPrice" name="price" type="number" className="itemPrice" placeholder="Enter Price" required />
                 </div>
-                <div className="inputWrapper">
+                {/* <div className="inputWrapper">
                   <label htmlFor="itemCurrency">Currency:</label>
-                  <input id="itemCurrency" name="itemCurrency" type="text" className="itemCurrency" placeholder="Enter Currency" />
-                </div>
+                  <input id="cost" name="itemCurrency" type="text" className="itemCurrency" placeholder="Enter Currency" />
+                </div> */}
               </div>
               <div className="inputWrapper">
-                <label htmlFor="itemDescription">Description:</label>
-                <textarea name="itemDescription" id="itemDescription" className="itemDescription" placeholder="Enter Item Description" />
+                <label htmlFor="description">Description:</label>
+                <textarea name="description" id="description" className="itemDescription" placeholder="Enter Item Description" />
               </div>
               <div className="inputWrapper">
                 <label htmlFor="itemTags">Tags(Comma Separated):</label>
@@ -60,11 +79,12 @@ class AddItemPage extends Component {
             </div>
           </div>
           <div className="buttonWrapper">
-            <button className="saveItemBtn" onClick={this.close.bind(this)}>Save</button>
+            <button className="saveItemBtn">Save</button>
             <button className="cancelItemBtn" onClick={this.close.bind(this)}>Cancel</button>
           </div>
         </div>
       </div>
+    </form>
     );
   }
 }

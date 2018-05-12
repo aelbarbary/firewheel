@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import UserItem from '../UserItem/index';
+import Offer from '../Offer/index';
 import AddItemPage from '../AddItemPage/index';
 import './styles.sass';
+import { API_ROOT } from '../../../api-config';
 
-class MyItems extends Component {
+class MyOffers extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,6 +16,19 @@ class MyItems extends Component {
   componentDidMount() {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
+
+    fetch (`${API_ROOT}/offers/`)
+    .then(results => {
+      return results.json();
+    }).then(data=> {
+        let myOffers = data.map((offer) => {
+          return(
+              <Offer key={offer.id} offer={offer} />
+          );
+        });
+        this.setState ({ myOffers: myOffers});
+    });
+
   }
 
   closeModal() {
@@ -52,10 +66,10 @@ class MyItems extends Component {
             + Add Item
           </button>
         </div>
-        {[1, 2].map((e, i) => <UserItem key={i} editModal={this.openModal.bind(this)}/>)}
+       {this.state.myOffers}
       </div>
     );
   }
 }
 
-export default MyItems;
+export default MyOffers;
