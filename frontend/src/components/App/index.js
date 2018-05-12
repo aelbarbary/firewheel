@@ -12,9 +12,7 @@ import Trades from '../Trades/index';
 import ItemPage from '../ItemPage/index';
 import MyOffers from '../MyOffers/index';
 import ErrorPage from '../ErrorPage/index';
-
 import Auth from '../../Auth/Auth.js';
-import Callback from '../../Callback/Callback';
 
 const auth = new Auth();
 

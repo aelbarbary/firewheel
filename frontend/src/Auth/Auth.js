@@ -4,7 +4,7 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'larayb.auth0.com',
     clientID: 'AI22CUqvw7Zo9jBch62EGf04BA634CeI',
-    redirectUri: 'http://larayb.com/callback',
+    redirectUri: 'http://localhost:8080/callback',
     audience: 'https://larayb.auth0.com/userinfo',
     responseType: 'token id_token',
     scope: 'openid'
@@ -29,6 +29,7 @@ export default class Auth {
 
  setSession(authResult) {
    // Set the time that the Access Token will expire at
+   console.log(authResult);
    let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
    localStorage.setItem('access_token', authResult.accessToken);
    localStorage.setItem('id_token', authResult.idToken);

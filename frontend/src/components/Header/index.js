@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './styles.sass';
-// import logo from './../../assets/images/logo.png';
+import logo from './../../assets/images/logo.png';
 
 class Header extends Component {
 
@@ -105,12 +105,12 @@ class Header extends Component {
 
     return (
       <header className="header">
-        <h1>
-          {/* <img src={logo} width="200px"/> */}
+        <div className="logoDiv">
           <Link to="/" className="logo">
-            LARAYB
+            <img src={logo} />
+            {/* LARAYB */}
           </Link>
-        </h1>
+        </div>
         {this.state.menuActive ? this.menuButton: ""}
         {this.state.nav}
       </header>
