@@ -7,24 +7,33 @@ export default class Auth {
     redirectUri: 'http://localhost:8080/callback',
     audience: 'https://larayb.auth0.com/userinfo',
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid profile',
   });
   constructor() {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+    // this.getProfile = this.getProfile.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
   }
+
   handleAuthentication() {
    this.auth0.parseHash((err, authResult) => {
      if (authResult && authResult.accessToken && authResult.idToken) {
        this.setSession(authResult);
+       this.auth0.client.userInfo(localStorage.getItem('access_token'), function(err, profile) {
+          console.log(profile);
+           localStorage.setItem('name', profile.name);
+           localStorage.setItem('user_id', profile.sub);
+       });
        // history.replace('/home');
      } else if (err) {
        // history.replace('/home');
        console.log(err);
      }
    });
+
+
  }
 
  setSession(authResult) {
@@ -43,9 +52,32 @@ export default class Auth {
    localStorage.removeItem('access_token');
    localStorage.removeItem('id_token');
    localStorage.removeItem('expires_at');
+   localStorage.removeItem('given_name');
    // navigate to the home route
    // history.replace('/home');
  }
+
+ // getProfile() {
+ //   if (this.isAuthenticated()) {
+ //     console.log("is authenticated");
+ //     var accessToken = localStorage.getItem('access_token');
+ //     console.log(accessToken);
+ //     if (!accessToken) {
+ //       console.log('Access Token must exist to fetch profile');
+ //     }
+ //
+ //     this.auth0.client.userInfo(accessToken, function(err, profile) {
+ //       console.log(profile);
+ //       console.log(err);
+ //       if (profile) {
+ //         return profile;
+ //       }
+ //     });
+ //   } else {
+ //     console.log(err);
+ //   }
+ // }
+
 
  isAuthenticated() {
    // Check whether the current time is past the

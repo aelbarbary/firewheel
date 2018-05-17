@@ -11,15 +11,18 @@ class Header extends Component {
 
   login() {
     this.props.auth.login();
+    this.setNav();
   }
 
   logout() {
     this.props.auth.logout();
+    this.setNav();
   }
 
   constructor(props) {
+    console.log("main props");
+    console.log(props);
     super(props);
-    this.state = {};
   }
 
   componentWillMount() {
@@ -49,6 +52,9 @@ class Header extends Component {
         </Link>
         <Link key={3} to="#" className="navLink" onClick={this.logout.bind(this)}>
           Logout
+        </Link>
+        <Link  key={1} to="/"  className="navLink">
+          {localStorage.getItem("name")}
         </Link>
       </div>
     );
@@ -90,7 +96,7 @@ class Header extends Component {
 
   setNav() {
     const { isAuthenticated } = this.props.auth;
-    console.log(isAuthenticated());
+
     // check for auth here
     if (isAuthenticated()) {
       this.setState({ nav: this.loggedInMenu });
@@ -99,9 +105,9 @@ class Header extends Component {
     }
   }
 
+
+
   render() {
-
-
 
     return (
       <header className="header">

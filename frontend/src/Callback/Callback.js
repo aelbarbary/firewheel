@@ -4,7 +4,7 @@
 // class Callback extends Component {
 //   render() {
 //     // const style = //...
-//     console.log("calling callback");
+
 //     return (
 //       <div>
 //         <h1>good job Abdelrahman</h1>

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 class Item extends Component {
 
   render() {
-    console.log(this.props.urlProp);
+    
     return(
       <div className="item">
         <p>{this.props.urlProp} </p>

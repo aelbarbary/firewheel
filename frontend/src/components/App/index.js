@@ -36,7 +36,6 @@ class App extends Component {
           <Route path="/myOffers" component={MyOffers} />
 
           <Route path="/callback" render={(props) => {
-             console.log("test");
              handleAuthentication(props);
              return <Main {...props} />
            }}/>
