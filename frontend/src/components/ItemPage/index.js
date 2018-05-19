@@ -4,6 +4,12 @@ import './styles.sass';
 import { API_ROOT } from '../../../api-config';
 
 class ItemPage extends Component {
+  constructor(){
+    super();
+    this.state = {
+      offer: {}
+    }
+  }
   componentDidMount() {
     document.body.scrollTop = 0;
     document.querySelector('.menu').classList.remove('open');
@@ -20,6 +26,7 @@ class ItemPage extends Component {
 
   render() {
     return (
+      this.state.offer &&
       <div className="itemPageWrapper">
         <div className="itemImgWrapper content" >
           <img src={this.state.offer.picture} />
