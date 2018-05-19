@@ -57,7 +57,7 @@ server {
 
 
    location /static {
-       alias /home/ubuntu/www/larayb/backend/static; # your Django project's static files - amend as required
+       alias /home/ubuntu/www/larayb/frontend/; # your Django project's static files - amend as required
    }
 
    location / {

@@ -4,7 +4,7 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'larayb.auth0.com',
     clientID: 'AI22CUqvw7Zo9jBch62EGf04BA634CeI',
-    redirectUri: 'http://localhost:8080/callback',
+    redirectUri: 'http://larayb.com/callback',
     audience: 'https://larayb.auth0.com/userinfo',
     responseType: 'token id_token',
     scope: 'openid profile',
@@ -15,6 +15,7 @@ export default class Auth {
     this.handleAuthentication = this.handleAuthentication.bind(this);
     // this.getProfile = this.getProfile.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
+    this.getUserbasicInfo = this.getUserbasicInfo.bind(this);
   }
 
   handleAuthentication() {
@@ -32,8 +33,13 @@ export default class Auth {
        console.log(err);
      }
    });
+ }
 
-
+ getUserbasicInfo(cb){
+   console.log(localStorage.getItem('access_token'));
+   this.auth0.client.userInfo(localStorage.getItem('access_token'), function(err, profile) {
+     cb(err, profile);
+   });
  }
 
  setSession(authResult) {
@@ -56,28 +62,6 @@ export default class Auth {
    // navigate to the home route
    // history.replace('/home');
  }
-
- // getProfile() {
- //   if (this.isAuthenticated()) {
- //     console.log("is authenticated");
- //     var accessToken = localStorage.getItem('access_token');
- //     console.log(accessToken);
- //     if (!accessToken) {
- //       console.log('Access Token must exist to fetch profile');
- //     }
- //
- //     this.auth0.client.userInfo(accessToken, function(err, profile) {
- //       console.log(profile);
- //       console.log(err);
- //       if (profile) {
- //         return profile;
- //       }
- //     });
- //   } else {
- //     console.log(err);
- //   }
- // }
-
 
  isAuthenticated() {
    // Check whether the current time is past the

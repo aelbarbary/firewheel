@@ -53,7 +53,7 @@ class Header extends Component {
         <Link key={3} to="#" className="navLink" onClick={this.logout.bind(this)}>
           Logout
         </Link>
-        <Link  key={1} to="/"  className="navLink">
+        <Link  key={1} to="/profile"  className="navLink">
           {localStorage.getItem("name")}
         </Link>
       </div>

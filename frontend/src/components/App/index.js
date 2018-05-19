@@ -31,7 +31,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Main} />
           <Route path="/item/:id" component={ItemPage} />
-          <Route path="/profile" component={Profile} />
+          <Route path="/profile" component={() => < Profile auth={auth} />} />
           <Route path="/trades" component={Trades} />
           <Route path="/myOffers" component={MyOffers} />
 
