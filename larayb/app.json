@@ -4,6 +4,10 @@
     "name": "React Native Starter Kit",
     "slug": "react-native-starter-kit",
     "icon": "src/images/app-icon.png",
-    "privacy": "public"
+    "privacy": "public",
+    "splash": {
+      "image": "./src/images/splash.png",
+      "backgroundColor": "#189ad3"
+    }
   }
 }

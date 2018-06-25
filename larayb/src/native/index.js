@@ -25,15 +25,15 @@ const App = ({ store, persistor }) => (
         persistor={persistor}
       >
         <StyleProvider style={getTheme(theme)}>
-          {/*<Router>
+          {/* <Router>
              <Stack key="root">
               {Routes}
-            </Stack> 
-          </Router>*/}
+            </Stack>
+          </Router> */}
           <NavigatorIOS
              initialRoute={{
                component: AboutComponent,
-               title: 'My Initial Scene',
+               title: '',
              }}
              style={{flex: 1}}
            />
