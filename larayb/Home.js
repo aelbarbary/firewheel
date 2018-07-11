@@ -3,12 +3,14 @@ import {Button, View} from 'react-native'
 import {Firebase} from './lib/firebase'
 
 class Home extends React.Component {
-  static navigationOptions = {
-    title: 'Welcome',
-  };
+  static navigationOptions  = ({navigation}) => ({
+         title: navigation.state.params && navigation.state.params.title
+  });
 
   constructor(props) {
     super(props);
+    this.props.navigation.setParams({title: Firebase.auth().currentUser.email});
+    console.log(Firebase.auth().currentUser.email);
     this.navigateToSplashScreen = this.navigateToSplashScreen.bind(this);
   }
 
@@ -22,15 +24,17 @@ class Home extends React.Component {
     });
   }
 
+  addGoal(){
+
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View>
       <Button
-        title="Hello"
-        onPress={() =>
-          navigate('Profile', { name: 'Jane' })
-        }
+        title="Add a daily goal"
+        onPress={this.addGoal}
       />
 
     <Button title="log out"

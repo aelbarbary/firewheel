@@ -15,16 +15,15 @@ class SignUp extends React.Component {
     title: 'Welcome Back',
   };
 
-
-
   handleSubmit = () => {
     const value = this._form.getValue();
-    console.log(value.email);
+    if (value){
     Firebase
       .auth()
       .signInWithEmailAndPassword(value.email, value.password)
-      .then(() => this.props.navigation.navigate('Home'))
+      .then(() => this.props.navigation.navigate('Home' ))
       .catch(error => this.setState({ errorMessage: error.message }))
+    }
   }
 
 
@@ -41,6 +40,10 @@ class SignUp extends React.Component {
         <Text>{this.props.emai} </Text>
         <Form type={User} ref={ c => this._form = c }/>
         <Button title="Sign In" onPress={this.handleSubmit}/>
+        <Button title="Sign up" onPress={ () => {
+            this.props.navigation.navigate('SignUp')
+          }}
+        />
       </View>
     );
   }
