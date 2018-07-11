@@ -9,14 +9,16 @@ class ProfileScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.logout = this.logout.bind(this);
+    this.navigateToHome = this.navigateToHome.bind(this);
+  }
+
+  navigateToHome(){
+        this.props.navigation.navigate('Loading')
+
   }
 
   logout(navigation){
-    Firebase.auth().signOut().then(function() {
-        this.props.navigation.navigate('Loading')
-    }, function(error) {
-    // An error happened.
+    Firebase.auth().signOut().then(this.navigateToHome, function(error) {
     });
   }
 
