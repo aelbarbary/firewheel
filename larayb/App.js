@@ -4,15 +4,15 @@ import {
 } from 'react-navigation';
 import SignUp from './SignUp'
 import SignIn from './SignIn'
-import ProfileScreen from './Profile'
-import Loading from './Loading'
+import Home from './Home'
+import Splash from './Splash'
 
 
 const App = createStackNavigator({
-  Loading: { screen: Loading },
+  Splash: { screen: Splash },
   SignUp: { screen: SignUp },
   SignIn: { screen: SignIn },
-  Profile: { screen: ProfileScreen },
+  Home: { screen: Home },
 });
 
 export default App;

@@ -23,7 +23,7 @@ class SignUp extends React.Component {
     Firebase
       .auth()
       .signInWithEmailAndPassword(value.email, value.password)
-      .then(() => this.props.navigation.navigate('Profile'))
+      .then(() => this.props.navigation.navigate('Home'))
       .catch(error => this.setState({ errorMessage: error.message }))
   }
 

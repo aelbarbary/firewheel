@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { View, Text, StyleSheet } from 'react-native'
 import { Firebase, FirebaseRef } from './lib/firebase'
 
-class Loading extends React.Component {
+class Splash extends React.Component {
 
   componentDidMount() {
     Firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? 'Profile' : 'SignIn')
+      this.props.navigation.navigate(user ? 'Home' : 'SignIn')
     })
   }
 
@@ -28,4 +28,4 @@ const style = StyleSheet.create({
   }
 });
 
-export default Loading;
+export default Splash;
