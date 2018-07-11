@@ -1,6 +1,8 @@
 import React from 'react';
 import {Button, StyleSheet, View, Text, Alert, Image} from 'react-native'
 import t from 'tcomb-form-native';
+import { Firebase, FirebaseRef } from './lib/firebase';
+import ErrorMessages from './constants/errors';
 
 const Form = t.form.Form;
 
@@ -20,7 +22,33 @@ class SignUp extends React.Component {
 
   handleSubmit = () => {
     const value = this._form.getValue();
-    console.log(value);
+    const {
+      email,
+      password,
+      password2,
+      firstName,
+      lastName,
+    } = value;
+
+
+    Firebase.auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((res) => {
+          // Send user details to Firebase database
+          if (res && res.uid) {
+            FirebaseRef.child(`users/${res.uid}`).set({
+              firstName,
+              lastName,
+              signedUp: Firebase.database.ServerValue.TIMESTAMP,
+              lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP,
+            }).then(() => statusMessage(dispatch, 'loading', false).then(resolve));
+          }
+    });
+
+  }
+
+  handleSignin = () => {
+    this.props.navigation.navigate('SignIn')
   }
 
 
@@ -37,6 +65,7 @@ class SignUp extends React.Component {
         <Text>{this.props.emai} </Text>
         <Form type={User} ref={ c => this._form = c }/>
         <Button title="Sign up" onPress={this.handleSubmit}/>
+        <Button title="Sign In" onPress={this.handleSignin}/>
       </View>
     );
   }
