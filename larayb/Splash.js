@@ -6,12 +6,14 @@ import { Firebase, FirebaseRef } from './lib/firebase'
 class Splash extends React.Component {
 
   componentDidMount() {
+    console.log("mount");
     Firebase.auth().onAuthStateChanged(user => {
       this.props.navigation.navigate(user ? 'Home' : 'SignIn')
     })
   }
 
   render () {
+    console.log("render");
     return(
         <View style={style.container}>
           <Text>Loading</Text>

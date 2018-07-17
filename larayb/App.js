@@ -6,13 +6,22 @@ import SignUp from './SignUp'
 import SignIn from './SignIn'
 import Home from './Home'
 import Splash from './Splash'
+import {Provider} from 'react-redux'
+import configureStore from './ConfigureStore'
 
-
-const App = createStackNavigator({
+const RootStack = createStackNavigator({
   Splash: { screen: Splash },
   SignUp: { screen: SignUp },
   SignIn: { screen: SignIn },
   Home: { screen: Home },
 });
 
-export default App;
+const store  = configureStore()
+
+export default class APP extends React.Component{
+  render(){
+    return  <Provider store={store}>
+                <RootStack/>
+            </Provider>
+  }
+}
