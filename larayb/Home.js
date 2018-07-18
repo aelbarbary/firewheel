@@ -25,8 +25,8 @@ class Home extends React.Component {
     });
   }
 
-  fetchGoals(){
-    return this.props.getGoals()
+  componentDidMount(){
+    this.props.getGoals()
   }
 
   render() {
@@ -38,11 +38,6 @@ class Home extends React.Component {
 
     <Button title="log out"
       onPress={this.logout}/>
-
-
-    <TouchableHighlight onPress={ () => this.fetchGoals()}>
-        <Text >Load People</Text>
-      </TouchableHighlight>
 
       {
         isFetching && <Text>Loading</Text>

@@ -1,15 +1,17 @@
 import { FETCHING_GOALS, FETCHING_GOLAS_SUCCESS, FETCHING_GOALS_FAILURE } from './Constants'
-
+import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchGoalsFromAPI() {
   return (dispatch) => {
-    dispatch(getGoals())
-    fetch('https://swapi.co/api/people/')
-    .then(data => data.json())
-    .then(json => {
-      console.log('json:', json)
-      dispatch(getGoalsSuccess(json.results))
-    })
-    // .catch(err => dispatch(getGoalsFailure(err)))
+    const ref = FirebaseRef.child(`goals`);
+
+    return ref.on('value', (snapshot) => {
+      const goals = snapshot.val() || [];
+
+      return dispatch({
+        type: FETCHING_GOLAS_SUCCESS,
+        data: goals,
+      });
+    });
   }
 }
 
