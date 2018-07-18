@@ -1,7 +1,7 @@
 import React from 'react';
-import {Button, View} from 'react-native'
+import {Button, View, TouchableHighlight, Text} from 'react-native'
 import {Firebase} from './lib/firebase'
-import { getGoals } from './actions'
+import { fetchGoalsFromAPI } from './actions'
 import { connect } from 'react-redux'
 
 class Home extends React.Component {
@@ -25,60 +25,56 @@ class Home extends React.Component {
     });
   }
 
-  componentDidMount() {
-    
-    this.fetchGoals()
-  }
-
-  fetchGoals = () => {
+  fetchGoals(){
     return this.props.getGoals()
-      .catch((err) => {
-        console.log(`Error: ${err}`);
-        return this.props.setError(err);
-      });
-  }
-
-  addGoal(){
-
   }
 
   render() {
     const { navigate } = this.props.navigation;
-
+    const { goals, isFetching } = this.props.goals;
+    console.log(goals);
     return (
       <View>
-      <Button
-        title="Add a daily goal"
-        onPress={this.addGoal}
-      />
-    {
-
-      //   this.props.goals ? (
-      //   this.props.goals.map( (g, index) => {
-      //     return (
-      //       <View key={index}>
-      //           <Text>{g.name}</Text>
-      //       </View>
-      //     )
-      //   }
-      //   )
-      // ) : null
-    }
 
     <Button title="log out"
       onPress={this.logout}/>
-    </View>
+
+
+    <TouchableHighlight onPress={ () => this.fetchGoals()}>
+        <Text >Load People</Text>
+      </TouchableHighlight>
+
+      {
+        isFetching && <Text>Loading</Text>
+      }
+      {
+
+        goals.length ? (
+          goals.map((person, i) => {
+            return <View key={i} >
+              <Text>Name: {person.name}</Text>
+            </View>
+          })
+        ) : null
+      }
+  </View>
     );
   }
 }
 
-const mapStateToProps = state => ({
-    goals: state
-});
-
-const mapDispatchToProps = {
-    getGoals
+function mapStateToProps (state) {
+  return {
+    goals: state.goals
+  }
 }
 
+function mapDispatchToProps (dispatch) {
+  return {
+    getGoals: () => dispatch(fetchGoalsFromAPI())
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home)

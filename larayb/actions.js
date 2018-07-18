@@ -1,20 +1,33 @@
-import {FETCHING_GOALS} from './Constants'
-import { Firebase, FirebaseRef } from './lib/firebase';
+import { FETCHING_GOALS, FETCHING_GOLAS_SUCCESS, FETCHING_GOALS_FAILURE } from './Constants'
 
-export function getGoals(dispatch) {
-  if (Firebase === null) return () => new Promise(resolve => resolve());
+export function fetchGoalsFromAPI() {
+  return (dispatch) => {
+    dispatch(getGoals())
+    fetch('https://swapi.co/api/people/')
+    .then(data => data.json())
+    .then(json => {
+      console.log('json:', json)
+      dispatch(getGoalsSuccess(json.results))
+    })
+    // .catch(err => dispatch(getGoalsFailure(err)))
+  }
+}
 
-  const UID = Firebase.auth().currentUser.uid;
-  if (!UID) return false;
+export function getGoals() {
+  return {
+    type: FETCHING_GOALS
+  }
+}
 
-  const ref = FirebaseRef.child(`goals`);
+export function getGoalsSuccess(data) {
+  return {
+    type: FETCHING_GOLAS_SUCCESS,
+    data,
+  }
+}
 
-  return ref.on('value', (snapshot) => {
-    console.log(snapshot.val());
-    const goals = snapshot.val() || [];
-    return dispatch({
-      type: FETCHING_GOALS,
-      data: goals,
-    });
-  });
+export function getGoalsFailure() {
+  return {
+    type: FETCHING_GOALS_FAILURE
+  }
 }
