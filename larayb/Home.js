@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, View, TouchableHighlight, Text} from 'react-native'
 import {Firebase} from './lib/firebase'
-import { fetchGoalsFromAPI } from './actions'
+import { fetchGoalsFromAPI, addHabitToFirebase } from './actions'
 import { connect } from 'react-redux'
 
 class Home extends React.Component {
@@ -29,21 +29,26 @@ class Home extends React.Component {
     this.props.getGoals()
   }
 
+  addHabit(){
+    this.props.addHabit()
+    console.log("calling add habit");
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     const { goals, isFetching } = this.props.goals;
-    console.log(goals);
+    
     return (
       <View>
 
     <Button title="log out"
       onPress={this.logout}/>
-
+    <Button title="Add a habit"
+        onPress={() =>  this.addHabit() }/>
       {
         isFetching && <Text>Loading</Text>
       }
       {
-
         goals.length ? (
           goals.map((person, i) => {
             return <View key={i} >
@@ -65,7 +70,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    getGoals: () => dispatch(fetchGoalsFromAPI())
+    getGoals: () => dispatch(fetchGoalsFromAPI()),
+    addHabit: () => dispatch(addHabitToFirebase())
   }
 }
 

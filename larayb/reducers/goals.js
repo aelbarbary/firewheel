@@ -1,4 +1,4 @@
-import { FETCHING_GOALS, FETCHING_GOLAS_SUCCESS, FETCHING_GOALS_FAILURE } from '../Constants'
+import { FETCHING_GOALS, FETCHING_GOLAS_SUCCESS, FETCHING_GOALS_FAILURE, ADDING_HABIT } from '../Constants'
 const initialState = {
   goals: [],
   isFetching: false,
@@ -25,6 +25,8 @@ export default function goalsReducer (state = initialState, action) {
         isFetching: false,
         error: true
       }
+    
+
     default:
       return state
   }
