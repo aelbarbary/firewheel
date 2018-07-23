@@ -1,7 +1,7 @@
 export default {
   loading: true,
   error: null,
-  goals: [
+  habits: [
     { id: 1, title: '---' },
     { id: 2, title: '----- ---' },
   ]

@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux'
-import goals from './goals'
+import habits from './habits'
 
 const rootReducer = combineReducers({
-  goals
+  habits
 })
 
 export default rootReducer

@@ -1,62 +1,69 @@
-import { FETCHING_GOALS, FETCHING_GOLAS_SUCCESS, FETCHING_GOALS_FAILURE, ADDING_HABIT } from './Constants'
+import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT } from './Constants'
 import {Firebase, FirebaseRef} from './lib/firebase'
-export function fetchGoalsFromAPI() {
+export function fetchHabitsFromStore() {
   return (dispatch) => {
-    const ref = FirebaseRef.child(`goals`);
+    const ref = FirebaseRef.child(`habits`);
 
     return ref.on('value', (snapshot) => {
-      // const goals = snapshot.val() || [];
-      var goals = [];
-      snapshot.forEach(function(goal) {
-        goals.push(goal.val());
+
+      var habits = [];
+      snapshot.forEach(function(habit) {
+        console.log(habit);
+        habits.push(habit.val());
       });
+      console.log("getting habits");
+      console.log(habits);
 
       return dispatch({
-        type: FETCHING_GOLAS_SUCCESS,
-        data: goals,
+        type: FETCHING_HABITS,
+        data: habits,
       });
     });
   }
 }
 
-export function addHabitToFirebase(){
+export function addHabitToStore(name, time){
   return (dispatch) => {
 
-    const ref = FirebaseRef.child(`goals`);
+    const ref = FirebaseRef.child(`habits`);
 
     ref.push().set({
-      name: "test",
-      time: "45"
+      name: name,
+      time: time
     });
 
     return ref.on('value', (snapshot) => {
-      const goals = snapshot.val() || [];
+      const habits = snapshot.val() || [];
 
       return dispatch({
         type: ADDING_HABIT,
-        data: goals,
+        data: habits,
+      });
+    });
+  }
+}
+
+export function deleteHabitFromStore(name){
+  return (dispatch) => {
+
+    const ref = FirebaseRef.child(`habits`);
+
+    ref.orderByChild('name').equalTo(name).once('value', (snapshot) => {
+
+      console.log(snapshot.val());
+
+      return dispatch({
+        type: DELETING_HABIT,
       });
     });
   }
 }
 
 
-export function getGoals() {
+export function getHabits(data) {
   return {
-    type: FETCHING_GOALS
-  }
-}
-
-export function getGoalsSuccess(data) {
-  return {
-    type: FETCHING_GOLAS_SUCCESS,
-    data,
-  }
-}
-
-export function getGoalsFailure() {
-  return {
-    type: FETCHING_GOALS_FAILURE
+    type: FETCHING_HABITS,
+    data
   }
 }
 
