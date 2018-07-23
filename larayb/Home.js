@@ -32,12 +32,16 @@ class Home extends React.Component {
   }
 
   navigateToSplashScreen(){
+        this.forceUpdate();
         this.props.navigation.navigate('Loading')
   }
 
   logout(navigation){
+
     Firebase.auth().signOut().then(this.navigateToSplashScreen, function(error) {
     });
+
+
   }
 
   componentDidMount(){

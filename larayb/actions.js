@@ -2,7 +2,12 @@ import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT } from './Constants'
 import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchHabitsFromStore() {
   return (dispatch) => {
-    const ref = FirebaseRef.child(`habits`);
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    const ref = FirebaseRef.child(`habits/${UID}`);
 
     return ref.on('value', (snapshot) => {
 
@@ -27,7 +32,11 @@ export function fetchHabitsFromStore() {
 export function addHabitToStore(name, time){
   return (dispatch) => {
 
-    const ref = FirebaseRef.child(`habits`);
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    const ref = FirebaseRef.child(`habits/${UID}`);
 
     ref.push().set({
       name: name,
@@ -48,14 +57,18 @@ export function addHabitToStore(name, time){
 export function deleteHabitFromStore(key){
   return (dispatch) => {
 
-    const ref = FirebaseRef.child(`habits`);
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+      
+    const ref = FirebaseRef.child(`habits/${UID}`);
 
     ref.child(key).remove();
 
     return dispatch({
       type: DELETING_HABIT,
     });
-    
+
   }
 }
 
