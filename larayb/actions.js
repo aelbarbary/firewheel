@@ -8,9 +8,11 @@ export function fetchHabitsFromStore() {
 
       var habits = [];
       snapshot.forEach(function(habit) {
-        console.log(habit);
-        habits.push(habit.val());
+        habitObject = habit.val();
+        habitObject.key = habit.key;
+        habits.push(habitObject);
       });
+
       console.log("getting habits");
       console.log(habits);
 
@@ -43,19 +45,17 @@ export function addHabitToStore(name, time){
   }
 }
 
-export function deleteHabitFromStore(name){
+export function deleteHabitFromStore(key){
   return (dispatch) => {
 
     const ref = FirebaseRef.child(`habits`);
 
-    ref.orderByChild('name').equalTo(name).once('value', (snapshot) => {
+    ref.child(key).remove();
 
-      console.log(snapshot.val());
-
-      return dispatch({
-        type: DELETING_HABIT,
-      });
+    return dispatch({
+      type: DELETING_HABIT,
     });
+    
   }
 }
 

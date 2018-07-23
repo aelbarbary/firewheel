@@ -54,8 +54,8 @@ class Home extends React.Component {
     }
   }
 
-  deleteHabit(name){
-    this.props.deleteHabit(name)
+  deleteHabit(key){
+    this.props.deleteHabit(key)
   }
 
   setModalVisible(visible) {
@@ -124,7 +124,7 @@ class Home extends React.Component {
                               />
                             }
                             title='Delete'
-                            onPress={ () => this.deleteHabit(habit.name) }
+                            onPress={ () => this.deleteHabit(habit.key) }
                           />
 
                         </Card>
