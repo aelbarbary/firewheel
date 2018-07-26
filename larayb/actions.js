@@ -15,6 +15,20 @@ export function fetchHabitsFromStore() {
       snapshot.forEach(function(habit) {
         habitObject = habit.val();
         habitObject.key = habit.key;
+        var totalTime = 0;
+
+        var arr = objectToArray(habitObject.logs);
+
+        if (arr != null){
+
+          arr.forEach(function(log){
+
+            totalTime += log.hours * 60 + log.minutes;
+          });
+        }
+
+
+        habitObject.totalTime = totalTime
         habits.push(habitObject);
       });
 
@@ -26,6 +40,14 @@ export function fetchHabitsFromStore() {
   }
 }
 
+function objectToArray(s) {
+  var arr = [];
+  for (var key in s){
+    arr.push(s[key]);
+  }
+
+  return arr;
+};
 export function addHabitToStore(name, time){
   return (dispatch) => {
 
@@ -120,8 +142,10 @@ export function logHabitInStore(key, hours, minutes){
 
     ref.push().set({
       hours: hours,
-      minutes: minutes
+      minutes: minutes,
+      date: new Date().toLocaleString()
     });
+
 
     return dispatch({
       type: LOG_HABIT,

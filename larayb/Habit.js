@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
 import Modal from "react-native-modal";
 import TimePicker from 'react-native-simple-time-picker';
+import * as Progress from 'react-native-progress';
 
 class Habit extends React.Component {
   state = {
@@ -18,8 +19,6 @@ class Habit extends React.Component {
 
   }
   deleteHabit(key){
-    console.log("priting key");
-    console.log(key);
     this.props.deleteHabit(key)
   }
 
@@ -42,10 +41,8 @@ class Habit extends React.Component {
 
 
   render () {
-    console.log("prionting habit ptopert");
-    console.log(this.props);
+
     const { habit } = this.props;
-    const cardTitle = habit.name + ' | ' + habit.time + ' min';
 
     const { selectedHours, selectedMinutes } = this.state;
     return <View>
@@ -73,7 +70,11 @@ class Habit extends React.Component {
 
           <FormLabel>Time</FormLabel>
           <FormInput onChangeText={(text) => this.editTime(habit.key, text)}>{habit.time}</FormInput>
+
+            <FormLabel>total</FormLabel>
+            <FormInput onChangeText={(text) => this.editTime(habit.key, text)}>{habit.totalTime}</FormInput>
         </View>
+
         <View style={{flex: 1, flexDirection: 'row'}}>
           <View style={styles.buttonContainer}>
             <Icon
@@ -93,6 +94,10 @@ class Habit extends React.Component {
               onPress={() => this.setModalVisible(!this.state.modalVisible)}
               />
           </View>
+          <View style={styles.buttonContainer}>
+            <Progress.Pie progress={0.4} size={55} />
+          </View>
+
         </View>
       </Card>
     </View>

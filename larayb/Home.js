@@ -60,7 +60,7 @@ class Home extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     const { habits } = this.props.habits;
-
+    console.log(habits);
     return (
       <View>
         <Modal
