@@ -25,6 +25,7 @@
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
     "react-native-modal": "^6.4.0",
+    "react-native-simple-time-picker": "^0.2.0",
     "react-navigation": "^2.6.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",

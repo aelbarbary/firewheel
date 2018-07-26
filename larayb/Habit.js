@@ -1,15 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View , StyleSheet, TextInput, Text} from 'react-native'
+import { View , StyleSheet, TextInput, Text, Button} from 'react-native'
 import { Icon, Card, FormInput, FormLabel, FormValidationMessage } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
-import { deleteHabitFromStore, editTimeInStore, editNameInStore } from './actions'
+import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
+import Modal from "react-native-modal";
+import TimePicker from 'react-native-simple-time-picker';
 
 class Habit extends React.Component {
+  state = {
+    modalVisible: false,
+  };
 
   constructor(props) {
     super(props);
+
   }
   deleteHabit(key){
     console.log("priting key");
@@ -25,13 +31,41 @@ class Habit extends React.Component {
     this.props.editTime(key, newTime);
   }
 
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
+  logHabit(key, hours, minutes){
+      this.props.logHabit(key, hours, minutes)
+      this.setModalVisible(false);
+  }
+
+
   render () {
     console.log("prionting habit ptopert");
     console.log(this.props);
     const { habit } = this.props;
     const cardTitle = habit.name + ' | ' + habit.time + ' min';
 
+    const { selectedHours, selectedMinutes } = this.state;
     return <View>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={this.state.modalVisible}
+        onRequestClose={() => {
+          alert('Modal has been closed.');
+        }}>
+        <View >
+         <TimePicker
+           selectedHours={selectedHours}
+           selectedMinutes={selectedMinutes}
+           onChange={(hours, minutes) => this.setState({ selectedHours: hours, selectedMinutes: minutes })}
+         />
+       <Button title="Save" onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }></Button>
+       </View>
+      </Modal>
+
       <Card >
         <View >
           <FormLabel>Name</FormLabel>
@@ -56,7 +90,7 @@ class Habit extends React.Component {
               reverse
               name='access-time'
               color='#f50'
-              onPress={() => console.log('hello')}
+              onPress={() => this.setModalVisible(!this.state.modalVisible)}
               />
           </View>
         </View>
@@ -96,6 +130,7 @@ function mapDispatchToProps(dispatch){
     deleteHabit :  (key) =>  { dispatch(deleteHabitFromStore(key)) },
     editName :  (key, newName) =>  { dispatch(editNameInStore(key, newName)) },
     editTime :  (key, newTime) =>  { dispatch(editTimeInStore(key, newTime)) },
+    logHabit: (key, hours, minutes) => { dispatch(logHabitInStore(key, hours, minutes)) }
   }
 }
 

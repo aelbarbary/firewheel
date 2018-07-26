@@ -1,4 +1,4 @@
-import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT, EDITING_HABIT } from './Constants'
+import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT, EDITING_HABIT, LOG_HABIT } from './Constants'
 import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchHabitsFromStore() {
   return (dispatch) => {
@@ -106,6 +106,26 @@ export function editTimeInStore(key, newTime){
       type: EDITING_HABIT,
     });
 
+  }
+}
+
+export function logHabitInStore(key, hours, minutes){
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    const ref = FirebaseRef.child(`habits/${UID}/${key}/logs`);
+
+    ref.push().set({
+      hours: hours,
+      minutes: minutes
+    });
+
+    return dispatch({
+      type: LOG_HABIT,
+    });
   }
 }
 
