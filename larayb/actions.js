@@ -1,4 +1,4 @@
-import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT } from './Constants'
+import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT, EDITING_HABIT } from './Constants'
 import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchHabitsFromStore() {
   return (dispatch) => {
@@ -17,9 +17,6 @@ export function fetchHabitsFromStore() {
         habitObject.key = habit.key;
         habits.push(habitObject);
       });
-
-      console.log("getting habits");
-      console.log(habits);
 
       return dispatch({
         type: FETCHING_HABITS,
@@ -60,7 +57,7 @@ export function deleteHabitFromStore(key){
     const UID = Firebase.auth().currentUser.uid;
     if (!UID)
       return false;
-      
+
     const ref = FirebaseRef.child(`habits/${UID}`);
 
     ref.child(key).remove();
@@ -71,6 +68,48 @@ export function deleteHabitFromStore(key){
 
   }
 }
+
+export function editNameInStore(key, newName){
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    const ref = FirebaseRef.child(`habits/${UID}/${key}`);
+
+    ref.update({
+      name: newName
+    });
+
+    return dispatch({
+      type: EDITING_HABIT,
+    });
+
+  }
+}
+
+export function editTimeInStore(key, newTime){
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    const ref = FirebaseRef.child(`habits/${UID}/${key}`);
+
+    ref.update({
+      time: newTime
+    });
+
+    return dispatch({
+      type: EDITING_HABIT,
+    });
+
+  }
+}
+
+
 
 
 export function getHabits(data) {

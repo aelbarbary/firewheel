@@ -1,15 +1,16 @@
 import React from 'react';
-import {Button, View, TouchableHighlight, Text, ScrollView} from 'react-native'
-import { Card, ListItem, Icon } from 'react-native-elements'
+import { View, TouchableHighlight, Text, ScrollView, StyleSheet} from 'react-native'
+import { Button, Card, ListItem, Icon } from 'react-native-elements'
 import {Firebase} from './lib/firebase'
-import { fetchHabitsFromStore, addHabitToStore, deleteHabitFromStore } from './actions'
+import { fetchHabitsFromStore, addHabitToStore } from './actions'
 import { connect } from 'react-redux'
 import Modal from "react-native-modal";
 import t from 'tcomb-form-native';
+import Habit  from './Habit'
 
 const Form = t.form.Form;
 
-const Habit = t.struct({
+const HabitModel = t.struct({
   name: t.String,
   time: t.Number
 });
@@ -17,6 +18,7 @@ const Habit = t.struct({
 class Home extends React.Component {
   state = {
     modalVisible: false,
+    isEditing: false
   };
 
   static navigationOptions  = ({navigation}) => ({
@@ -26,9 +28,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.props.navigation.setParams({title: Firebase.auth().currentUser.email});
-
     this.navigateToSplashScreen = this.navigateToSplashScreen.bind(this);
-
   }
 
   navigateToSplashScreen(){
@@ -37,11 +37,8 @@ class Home extends React.Component {
   }
 
   logout(navigation){
-
     Firebase.auth().signOut().then(this.navigateToSplashScreen, function(error) {
     });
-
-
   }
 
   componentDidMount(){
@@ -51,15 +48,9 @@ class Home extends React.Component {
   addHabit(){
     const value = this._form.getValue();
     if (value) {
-      console.log(value.name);
       this.props.addHabit(value.name, value.time)
-      console.log("calling add habit");
       this.setModalVisible(!this.state.modalVisible);
     }
-  }
-
-  deleteHabit(key){
-    this.props.deleteHabit(key)
   }
 
   setModalVisible(visible) {
@@ -67,80 +58,62 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props.habits);
     const { navigate } = this.props.navigation;
     const { habits } = this.props.habits;
 
     return (
       <View>
-
         <Modal
-        animationType="slide"
-        transparent={false}
-        visible={this.state.modalVisible}
-        onRequestClose={() => {
-          alert('Modal has been closed.');
-        }}>
-        <View style={{marginTop: 22}}>
-          <View>
-          <Form type={Habit} ref={ c => this._form = c }/>
-            <TouchableHighlight
-              onPress={() => {
-                this.addHabit();
-
-              }}>
-              <Text>Save</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => {
-                this.setModalVisible(!this.state.modalVisible);
-              }}>
-              <Text>Cancel</Text>
-            </TouchableHighlight>
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={{marginTop: 22}}>
+            <View>
+              <Form type={HabitModel} ref={ c => this._form = c }/>
+              <TouchableHighlight
+                onPress={() => {
+                  this.addHabit();
+                }}>
+                <Text>Save</Text>
+              </TouchableHighlight>
+              <Text>
+                {this.state.isEditing.toString()}
+              </Text>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Cancel</Text>
+              </TouchableHighlight>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      <Button title="log out"
-        onPress={this.logout}/>
+        <Button
+          title="log out"
+          onPress={this.logout}/>
 
-      <Button title="Add a habit"
-          onPress={() => this.setModalVisible(true) }/>
+        <Button
+          title="Add a habit"
+          onPress={() => {
+            this.setState({isEditing: false});
+            this.setModalVisible(true);
 
-      <ScrollView>
-      {
+          } }/>
+        <ScrollView>
+            {
+              habits.length ? (
+                habits.map((habit, i) => {
+                  return <Habit key={habit.key} habit={habit}/>
+                })
+              ) : null
 
-          habits.length ? (
-            habits.map((habit, i) => {
-              return <View key={i} >
-                        <Card title={habit.name}>
-
-                          <Text style={{marginBottom: 10}}>
-                            {habit.time}
-                          </Text>
-
-                          <Button
-                            icon={
-                              <Icon
-                                name='close'
-                                size={15}
-                                color='white'
-                              />
-                            }
-                            title='Delete'
-                            onPress={ () => this.deleteHabit(habit.key) }
-                          />
-
-                        </Card>
-                    </View>
-            })
-          ) : null
-
-        }
-        </ScrollView>
-
-
-    </View>
+            }
+          </ScrollView>
+      </View>
     );
   }
 }
@@ -155,7 +128,6 @@ function mapDispatchToProps (dispatch) {
   return {
     getHabits: () => dispatch(fetchHabitsFromStore()),
     addHabit: (name, time) => dispatch(addHabitToStore(name, time)),
-    deleteHabit: (name) => dispatch(deleteHabitFromStore(name)),
   }
 }
 
