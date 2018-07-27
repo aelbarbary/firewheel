@@ -65,14 +65,14 @@ class Habit extends React.Component {
 
       <Card >
         <View >
+          <Progress.Bar progress={habit.totalTime/habit.time} width={200} />
+
           <FormLabel>Name</FormLabel>
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
 
           <FormLabel>Time</FormLabel>
           <FormInput onChangeText={(text) => this.editTime(habit.key, text)}>{habit.time}</FormInput>
 
-            <FormLabel>total</FormLabel>
-            <FormInput onChangeText={(text) => this.editTime(habit.key, text)}>{habit.totalTime}</FormInput>
         </View>
 
         <View style={{flex: 1, flexDirection: 'row'}}>
@@ -93,9 +93,6 @@ class Habit extends React.Component {
               color='#f50'
               onPress={() => this.setModalVisible(!this.state.modalVisible)}
               />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Progress.Pie progress={0.4} size={55} />
           </View>
 
         </View>
