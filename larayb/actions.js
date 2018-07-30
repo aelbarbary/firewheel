@@ -8,6 +8,8 @@ export function fetchHabitsFromStore() {
       return false;
 
     const ref = FirebaseRef.child(`habits/${UID}`);
+    var date = new Date();
+    dateKey = date.toISOString().split('T')[0];
 
     return ref.on('value', (snapshot) => {
 
@@ -17,16 +19,17 @@ export function fetchHabitsFromStore() {
         habitObject.key = habit.key;
         var totalTime = 0;
 
-        var arr = objectToArray(habitObject.logs);
+        const logsRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs/${dateKey}`);
 
-        if (arr != null){
 
-          arr.forEach(function(log){
+        logsRef.on('value', (snapshotLog) => {
+          snapshotLog.forEach(function(habitLog) {
+            
+            totalTime += habitLog.val().hours * 60 + habitLog.val().minutes;
 
-            totalTime += log.hours * 60 + log.minutes;
           });
-        }
 
+        });
 
         habitObject.totalTime = totalTime
         habits.push(habitObject);
@@ -134,18 +137,19 @@ export function editTimeInStore(key, newTime){
 export function logHabitInStore(key, hours, minutes){
   return (dispatch) => {
 
+    var date = new Date();
+    dateKey = date.toISOString().split('T')[0];
     const UID = Firebase.auth().currentUser.uid;
     if (!UID)
       return false;
 
-    const ref = FirebaseRef.child(`habits/${UID}/${key}/logs`);
+    const ref = FirebaseRef.child(`habits/${UID}/${key}/logs/${dateKey}`);
 
     ref.push().set({
       hours: hours,
       minutes: minutes,
       date: new Date().toLocaleString()
     });
-
 
     return dispatch({
       type: LOG_HABIT,
