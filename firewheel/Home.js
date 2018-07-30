@@ -63,7 +63,7 @@ class Home extends React.Component {
     const { habits } = this.props.habits;
     console.log(habits);
     return (
-      <View>
+      <View style={styles.mainContainer}>
         <Modal
           animationType="slide"
           transparent={false}
@@ -104,7 +104,7 @@ class Home extends React.Component {
             this.setModalVisible(true);
 
           } }/>
-        <ScrollView style={styles.mainContainer}>
+        <ScrollView >
             {
               habits.length ? (
                 habits.map((habit, i) => {
@@ -121,7 +121,8 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   mainContainer:{
-    marginBottom:110
+    marginBottom:110,
+    marginTop: 100
   }
 });
 function mapStateToProps (state) {
