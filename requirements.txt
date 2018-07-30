@@ -1,9 +1,0 @@
-Django
-psycopg2-binary
-Pillow
-django-storages
-django-registration
-boto3
-djangorestframework
-django-cors-headers
-coreapi

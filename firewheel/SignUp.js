@@ -59,7 +59,7 @@ class SignUp extends React.Component {
       <View style={styles.container}>
         <View style={styles.logo}>
           <Image source={require('./logo.png')} style={{width:100, height:100, }} />
-          <Text>LARAYB</Text>
+          <Text>Fire-Wheel</Text>
         </View>
 
         <Text>{this.props.emai} </Text>

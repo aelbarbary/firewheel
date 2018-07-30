@@ -22,7 +22,8 @@ class Home extends React.Component {
   };
 
   static navigationOptions  = ({navigation}) => ({
-         title: navigation.state.params && navigation.state.params.title
+         title: navigation.state.params && navigation.state.params.title,
+         header: null
   });
 
   constructor(props) {
@@ -103,7 +104,7 @@ class Home extends React.Component {
             this.setModalVisible(true);
 
           } }/>
-        <ScrollView>
+        <ScrollView style={styles.mainContainer}>
             {
               habits.length ? (
                 habits.map((habit, i) => {
@@ -118,6 +119,11 @@ class Home extends React.Component {
   }
 }
 
+const styles = StyleSheet.create({
+  mainContainer:{
+    marginBottom:110
+  }
+});
 function mapStateToProps (state) {
   return {
     habits: state.habits

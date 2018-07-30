@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "FireWheel",
+    "description": "FireWheel is an app to track and cultivate your good habits",
+    "icon": "./logo.png",
+    "version": "1.0.0",
+    "slug": "your-app-slug",
+    "sdkVersion": "27.0.0",
+    "ios": {
+      "bundleIdentifier": "com.abdel.firewheel"
+    },
+    "android": {
+      "package": "com.abdel.firewheel"
+    }
+   }
+}

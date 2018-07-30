@@ -63,10 +63,9 @@ class Habit extends React.Component {
        </View>
       </Modal>
 
-      <Card >
+      <Card>
         <Progress.Bar progress={habit.totalTime/habit.time}  width={300}  />
         <View style={styles.container}>
-          <FormLabel>Name</FormLabel>
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
 
           <FormLabel>Time</FormLabel>
@@ -103,6 +102,7 @@ class Habit extends React.Component {
 }
 
 const styles = StyleSheet.create({
+
   colContainer: {
     flex: 1,
     flexDirection: 'column',
