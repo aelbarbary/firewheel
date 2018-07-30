@@ -10,9 +10,11 @@ const User = t.struct({
   password: t.String
 });
 
-class SignUp extends React.Component {
+class SignIn extends React.Component {
   static navigationOptions = {
     title: 'Welcome Back',
+    header: null
+
   };
 
   handleSubmit = () => {
@@ -63,4 +65,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SignUp ;
+export default SignIn ;

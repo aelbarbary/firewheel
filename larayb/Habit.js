@@ -64,9 +64,8 @@ class Habit extends React.Component {
       </Modal>
 
       <Card >
-        <View >
-          <Progress.Bar progress={habit.totalTime/habit.time} width={200} />
-
+        <Progress.Bar progress={habit.totalTime/habit.time}  width={300}  />
+        <View style={styles.container}>
           <FormLabel>Name</FormLabel>
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
 
@@ -75,14 +74,15 @@ class Habit extends React.Component {
 
         </View>
 
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={styles.buttonContainer}>
+        <View style={styles.buttonContainer}>
+          <View>
             <Icon
               reverse
               name='close'
               type='font-awesome'
               color='#f50'
               onPress={() => this.deleteHabit(habit.key)}
+              size={15}
               />
           </View>
 
@@ -92,6 +92,7 @@ class Habit extends React.Component {
               name='access-time'
               color='#f50'
               onPress={() => this.setModalVisible(!this.state.modalVisible)}
+              size={15}
               />
           </View>
 
@@ -102,15 +103,15 @@ class Habit extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  colContainer: {
+    flex: 1,
+    flexDirection: 'column',
+
+  },
+  buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  habitInfo:{
-    flex: 1,
-    flexDirection: 'row'
+
   },
   textInput:{
     borderColor:'gray',
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
     padding: 5,
     margin: 5
   }
+
 });
 
 
