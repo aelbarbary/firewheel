@@ -12,6 +12,7 @@ import * as Progress from 'react-native-progress';
 class Habit extends React.Component {
   state = {
     modalVisible: false,
+    logDescription: ''
   };
 
   constructor(props) {
@@ -35,7 +36,7 @@ class Habit extends React.Component {
   }
 
   logHabit(key, hours, minutes){
-      this.props.logHabit(key, hours, minutes)
+      this.props.logHabit(key, hours, minutes, this.state.logDescription)
       this.setModalVisible(false);
   }
 
@@ -54,18 +55,32 @@ class Habit extends React.Component {
           alert('Modal has been closed.');
         }}>
         <View >
-         <TimePicker
-           selectedHours={selectedHours}
-           selectedMinutes={selectedMinutes}
-           onChange={(hours, minutes) => this.setState({ selectedHours: hours, selectedMinutes: minutes })}
-         />
-       <Button title="Save" onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }></Button>
-       </View>
+          <FormLabel>Duration</FormLabel>
+          <TimePicker
+            selectedHours={selectedHours}
+            selectedMinutes={selectedMinutes}
+            onChange={(hours, minutes) => this.setState({ selectedHours: hours, selectedMinutes: minutes })}
+            />
+
+          <FormLabel>Description</FormLabel>
+          <FormInput onChangeText={(text) => this.setState({logDescription : text}) }>
+
+          </FormInput>
+
+          <Button
+            title="Save"
+            onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }>
+          </Button>
+          <Button
+            title="Cancel"
+            onPress={() => this.setModalVisible(false) }>
+          </Button>
+        </View>
       </Modal>
 
       <Card>
-        <Progress.Bar progress={habit.totalTime/habit.time}  width={300}  />
-        <View style={styles.container}>
+        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  width={300}  />
+        <View>
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
 
           <FormLabel>Time</FormLabel>
@@ -134,7 +149,7 @@ function mapDispatchToProps(dispatch){
     deleteHabit :  (key) =>  { dispatch(deleteHabitFromStore(key)) },
     editName :  (key, newName) =>  { dispatch(editNameInStore(key, newName)) },
     editTime :  (key, newTime) =>  { dispatch(editTimeInStore(key, newTime)) },
-    logHabit: (key, hours, minutes) => { dispatch(logHabitInStore(key, hours, minutes)) }
+    logHabit: (key, hours, minutes, description) => { dispatch(logHabitInStore(key, hours, minutes, description)) }
   }
 }
 

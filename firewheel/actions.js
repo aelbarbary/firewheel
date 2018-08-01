@@ -9,7 +9,7 @@ export function fetchHabitsFromStore() {
 
     const ref = FirebaseRef.child(`habits/${UID}`);
     var date = new Date();
-    dateKey = date.toISOString().split('T')[0];
+    dateKey = formatDate(date);
 
     return ref.on('value', (snapshot) => {
 
@@ -21,14 +21,12 @@ export function fetchHabitsFromStore() {
 
         const logsRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs/${dateKey}`);
 
-
         logsRef.on('value', (snapshotLog) => {
           snapshotLog.forEach(function(habitLog) {
-            
+
             totalTime += habitLog.val().hours * 60 + habitLog.val().minutes;
 
           });
-
         });
 
         habitObject.totalTime = totalTime
@@ -134,11 +132,12 @@ export function editTimeInStore(key, newTime){
   }
 }
 
-export function logHabitInStore(key, hours, minutes){
+export function logHabitInStore(key, hours, minutes, description){
   return (dispatch) => {
 
     var date = new Date();
-    dateKey = date.toISOString().split('T')[0];
+    dateKey = formatDate(date);
+    console.log("dateKey:" + dateKey);
     const UID = Firebase.auth().currentUser.uid;
     if (!UID)
       return false;
@@ -148,6 +147,7 @@ export function logHabitInStore(key, hours, minutes){
     ref.push().set({
       hours: hours,
       minutes: minutes,
+      description: description,
       date: new Date().toLocaleString()
     });
 
@@ -155,6 +155,18 @@ export function logHabitInStore(key, hours, minutes){
       type: LOG_HABIT,
     });
   }
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 
 

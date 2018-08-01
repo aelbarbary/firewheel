@@ -61,7 +61,6 @@ class Home extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     const { habits } = this.props.habits;
-    console.log(habits);
     return (
       <View style={styles.mainContainer}>
         <Modal
@@ -99,6 +98,7 @@ class Home extends React.Component {
 
         <Button
           title="Add a habit"
+          backgroundColor="red"
           onPress={() => {
             this.setState({isEditing: false});
             this.setModalVisible(true);
