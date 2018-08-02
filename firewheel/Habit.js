@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View , StyleSheet, TextInput, Text, Button} from 'react-native'
-import { Icon, Card, FormInput, FormLabel, FormValidationMessage } from 'react-native-elements'
+import { View , StyleSheet, TextInput, Text} from 'react-native'
+import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
 import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
@@ -79,7 +79,7 @@ class Habit extends React.Component {
       </Modal>
 
       <Card>
-        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  width={300}  />
+        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  width={300}  color={'gray'} />
         <View>
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
 
@@ -89,28 +89,17 @@ class Habit extends React.Component {
         </View>
 
         <View style={styles.buttonContainer}>
-          <View>
-            <Icon
-              reverse
-              name='close'
-              type='font-awesome'
-              color='#f50'
-              onPress={() => this.deleteHabit(habit.key)}
-              size={15}
-              />
-          </View>
+            <Button
+              buttonStyle={styles.button}
+              rightIcon={{name: 'access-time'}}
+              title='Log' />
 
-          <View style={styles.buttonContainer}>
-            <Icon
-              reverse
-              name='access-time'
-              color='#f50'
-              onPress={() => this.setModalVisible(!this.state.modalVisible)}
-              size={15}
-              />
-          </View>
-
+            <Button
+              buttonStyle={styles.button}
+              rightIcon={{name: 'close'}}
+              title='Delete' />
         </View>
+
       </Card>
     </View>
   }
@@ -126,13 +115,16 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-
+    marginTop: 10
   },
   textInput:{
     borderColor:'gray',
     borderWidth: 1,
     padding: 5,
     margin: 5
+  },
+  button:{
+    width:100
   }
 
 });
