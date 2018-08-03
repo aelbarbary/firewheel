@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View , StyleSheet, TextInput, Text} from 'react-native'
+import { View , StyleSheet, TextInput, Text, TouchableHighlight} from 'react-native'
 import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
@@ -69,35 +69,49 @@ class Habit extends React.Component {
 
           <Button
             title="Save"
-            onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }>
+            onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }
+            style={styles.button}>
           </Button>
           <Button
             title="Cancel"
-            onPress={() => this.setModalVisible(false) }>
+            onPress={() => this.setModalVisible(false)
+             }
+             style={styles.button}>
           </Button>
         </View>
       </Modal>
 
-      <Card>
+      <Card style={{padding:0}}>
         <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  width={300}  color={'gray'} />
         <View>
+          {/*
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
 
           <FormLabel>Time</FormLabel>
           <FormInput onChangeText={(text) => this.editTime(habit.key, text)}>{habit.time}</FormInput>
+          */}
+          <View style={styles.habitText}>
+            <Text style={{fontSize:20, fontWeight: 'bold'}}>{habit.name}</Text>
+            <Text style={{fontSize:20, color:'red'}}> for </Text>
+            <Text style={{fontSize:20, }}>{habit.time} minutes</Text>
+          </View>
 
         </View>
 
         <View style={styles.buttonContainer}>
-            <Button
-              buttonStyle={styles.button}
-              rightIcon={{name: 'access-time'}}
-              title='Log' />
 
-            <Button
-              buttonStyle={styles.button}
-              rightIcon={{name: 'close'}}
-              title='Delete' />
+          <TouchableHighlight onPress={() => this.setModalVisible(!this.state.modalVisible)}>
+            <Icon
+              name='access-time'
+            />
+          </TouchableHighlight>
+
+          <TouchableHighlight onPress={() => this.deleteHabit(habit.key)}>
+            <Icon
+              name='delete'
+            />
+          </TouchableHighlight>
+
         </View>
 
       </Card>
@@ -110,12 +124,11 @@ const styles = StyleSheet.create({
   colContainer: {
     flex: 1,
     flexDirection: 'column',
-
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 10
+    marginTop: 0
   },
   textInput:{
     borderColor:'gray',
@@ -124,11 +137,19 @@ const styles = StyleSheet.create({
     margin: 5
   },
   button:{
-    width:100
+      
+      padding: 5,
+      borderWidth: 0,
+      borderRadius: 5
+  },
+  habitText:{
+    flex: 1,
+    flexDirection: 'row',
+    alignItems:'center' ,
+    justifyContent:'center'
   }
 
 });
-
 
 function mapStateToProps(state){
   return{
@@ -136,7 +157,6 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch){
-
   return {
     deleteHabit :  (key) =>  { dispatch(deleteHabitFromStore(key)) },
     editName :  (key, newName) =>  { dispatch(editNameInStore(key, newName)) },
