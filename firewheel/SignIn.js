@@ -5,16 +5,27 @@ import {Firebase} from './lib/firebase'
 
 const Form = t.form.Form;
 
+var options = {
+  fields: {
+    password: {
+      secureTextEntry: true
+    }
+  }
+};
+
 const User = t.struct({
   email: t.String,
   password: t.String
 });
 
 class SignIn extends React.Component {
+  state = {
+    errorMessage: ''
+  };
+
   static navigationOptions = {
     title: 'Welcome Back',
     header: null
-
   };
 
   handleSubmit = () => {
@@ -38,11 +49,11 @@ class SignIn extends React.Component {
           <Image source={require('./logo.png')} style={{width:100, height:100, }} />
           <Text>FireWheel</Text>
         </View>
-
+        <Text style={{color:'red'}}>{this.state.errorMessage}</Text>
         <Text>{this.props.emai} </Text>
-        <Form type={User} ref={ c => this._form = c }/>
+        <Form type={User} ref={ c => this._form = c } options={options}/>
         <Button title="Sign In" onPress={this.handleSubmit}/>
-        <Button title="Sign up" onPress={ () => {
+        <Button title="Create new account" onPress={ () => {
             this.props.navigation.navigate('SignUp')
           }}
         />

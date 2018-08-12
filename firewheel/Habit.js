@@ -8,6 +8,7 @@ import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore
 import Modal from "react-native-modal";
 import TimePicker from 'react-native-simple-time-picker';
 import * as Progress from 'react-native-progress';
+import { Dimensions } from "react-native";
 
 class Habit extends React.Component {
   state = {
@@ -46,6 +47,8 @@ class Habit extends React.Component {
     const { habit } = this.props;
 
     const { selectedHours, selectedMinutes } = this.state;
+    var width = Dimensions.get('window').width;
+    var height = Dimensions.get('window').height;
     return <View>
       <Modal
         animationType="slide"
@@ -54,8 +57,9 @@ class Habit extends React.Component {
         onRequestClose={() => {
           alert('Modal has been closed.');
         }}>
-        <View >
+        <View>
           <FormLabel>Duration</FormLabel>
+
           <TimePicker
             selectedHours={selectedHours}
             selectedMinutes={selectedMinutes}
@@ -82,7 +86,9 @@ class Habit extends React.Component {
       </Modal>
 
       <Card style={{padding:0}}>
-        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  width={300}  color={'gray'} />
+
+        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  color={'gray'}  width={width-60}/>
+
         <View>
           {/*
           <FormInput onChangeText={(text) => this.editName(habit.key, text)}>{habit.name}</FormInput>
@@ -103,6 +109,14 @@ class Habit extends React.Component {
           <TouchableHighlight onPress={() => this.setModalVisible(!this.state.modalVisible)}>
             <Icon
               name='access-time'
+            />
+          </TouchableHighlight>
+
+          <TouchableHighlight onPress={() => this.props.navigation.navigate('HabitHistory', {
+              habitKey: habit.key
+              })}>
+            <Icon
+              name='edit'
             />
           </TouchableHighlight>
 
@@ -137,7 +151,6 @@ const styles = StyleSheet.create({
     margin: 5
   },
   button:{
-      
       padding: 5,
       borderWidth: 0,
       borderRadius: 5

@@ -1,4 +1,4 @@
-import { FETCHING_HABITS, ADDING_HABIT } from '../Constants'
+import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT_LOG } from '../Constants'
 const initialState = {
   habits: [],
   isFetching: false,
@@ -13,6 +13,12 @@ export default function habitsReducer (state = initialState, action) {
         isFetching: false,
         habits: action.data
       }
+      case DELETING_HABIT_LOG:
+        return {
+          ...state,
+          habitLogs: action.data
+        }
+
 
     default:
       return state

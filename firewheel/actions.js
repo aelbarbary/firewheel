@@ -1,4 +1,4 @@
-import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT, EDITING_HABIT, LOG_HABIT } from './Constants'
+import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT, EDITING_HABIT, LOG_HABIT, FETCHING_HABITS_LOGS, DELETING_HABIT_LOG } from './Constants'
 import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchHabitsFromStore() {
   return (dispatch) => {
@@ -40,6 +40,74 @@ export function fetchHabitsFromStore() {
     });
   }
 }
+
+export function getHabitLogsFromStore(habitKey) {
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    var date = new Date();
+    dateKey = formatDate(date);
+    const ref = FirebaseRef.child(`habits/${UID}/${habitKey}/logs/${dateKey}`);
+    console.log(ref);
+    var logs = [];
+
+    return ref.on('value', (snapshot) => {
+
+      snapshot.forEach(function(log) {
+        logObject = log.val();
+        logObject.key = log.key;
+        console.log(logObject);
+        logs.push(logObject);
+      });
+      console.log(logs);
+      return dispatch({
+        type: FETCHING_HABITS_LOGS,
+        data: logs,
+      });
+    });
+  }
+}
+
+export function deleteHabitLogFromStore(habitKey, habitLogKey){
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    var date = new Date();
+    dateKey = formatDate(date);
+
+    var ref = FirebaseRef.child(`habits/${UID}/${habitKey}/logs/${dateKey}`);
+    console.log(habitLogKey);
+    ref.child(habitLogKey).remove();
+
+
+    ref = FirebaseRef.child(`habits/${UID}/${habitKey}/logs/${dateKey}`);
+    console.log(ref);
+    var logs = [];
+
+    return ref.on('value', (snapshot) => {
+
+      snapshot.forEach(function(log) {
+        logObject = log.val();
+        logObject.key = log.key;
+        console.log(logObject);
+        logs.push(logObject);
+      });
+      console.log(logs);
+      return dispatch({
+        type: FETCHING_HABITS_LOGS,
+        data: logs,
+      });
+    });
+
+  }
+}
+
 
 function objectToArray(s) {
   var arr = [];
@@ -137,7 +205,7 @@ export function logHabitInStore(key, hours, minutes, description){
 
     var date = new Date();
     dateKey = formatDate(date);
-    console.log("dateKey:" + dateKey);
+
     const UID = Firebase.auth().currentUser.uid;
     if (!UID)
       return false;

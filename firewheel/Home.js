@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet} from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, Image} from 'react-native'
 import { Button, Card, ListItem, Icon } from 'react-native-elements'
 import {Firebase} from './lib/firebase'
 import { fetchHabitsFromStore, addHabitToStore } from './actions'
@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import Modal from "react-native-modal";
 import t from 'tcomb-form-native';
 import Habit  from './Habit'
-
+import Images from './img/index';
 
 const Form = t.form.Form;
 
@@ -19,7 +19,8 @@ const HabitModel = t.struct({
 class Home extends React.Component {
   state = {
     modalVisible: false,
-    isEditing: false
+    isEditing: false,
+    refreshing: false,
   };
 
   static navigationOptions  = ({navigation}) => ({
@@ -59,18 +60,28 @@ class Home extends React.Component {
     this.setState({modalVisible: visible});
   }
 
+  onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.getHabits()
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     const { habits } = this.props.habits;
-    var overAllTime = 0;
+    var doneTime = 0;
+    var allTime = 0;
     habits.forEach(function(ele){
-      overAllTime += ele.totalTime;
+      doneTime += ele.totalTime;
+      allTime += ele.time;
     });
-    console.log("total time:" + overAllTime);
+
+    var progress = Math.round((doneTime / allTime) * 5);
+
+    console.log(progress);
 
     return (
-      <View style={styles.mainContainer}>
-        <Modal
+      <View style={{flex:1}}>
+          <Modal
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
@@ -99,62 +110,104 @@ class Home extends React.Component {
           </View>
         </Modal>
 
-        <View>
-          <Button
-            title="log out"
-            onPress={this.logout}
-            style={styles.button}/>
+          <View style={styles.header}>
+            <View style={styles.headerContent}>
+                <Image style={styles.avatar}
+                  source={ progress >= 5 ? Images.image5 :
+                          progress == 4 ? Images.image4  :
+                          progress == 3 ? Images.image3  :
+                          progress ==  2 ? Images.image2 :
+                          progress ==  1 ? Images.image1 :
+                          Images.image0}/>
+                <Text style={styles.userInfo}> {Firebase.auth().currentUser.email} </Text>
+                <Button title="Add a habit" onPress={() => {
+                                                          this.setState({isEditing: false});
+                                                           this.setModalVisible(true);
+                                                         }}></Button>
+            </View>
+          </View>
 
-          <Button
-            title="Add a habit"
-            backgroundColor="red"
-            style={styles.button}
-            onPress={() => {
-              this.setState({isEditing: false});
-              this.setModalVisible(true);
+          <View style={styles.body}>
+            <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
+             <ScrollView >
+                 {
+                   habits.length ? (
+                     habits.map((habit, i) => {
+                       return <Habit key={habit.key} habit={habit} style={{margin:0}} navigation={this.props.navigation}/>
+                     })
+                   ) : null
+                 }
+               </ScrollView>
+           </View>
 
-            } }/>
-        </View>
-
-        <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
-          <Text style={styles.headline}>{overAllTime} </Text>
-          <ScrollView >
-              {
-                habits.length ? (
-                  habits.map((habit, i) => {
-                    return <Habit key={habit.key} habit={habit} style={{margin:0}}/>
-                  })
-                ) : null
-
-              }
-            </ScrollView>
-        </View>
+          </View>
       </View>
-
     );
   }
 }
 
 const styles = StyleSheet.create({
-  mainContainer:{
-    marginBottom:20,
-    marginTop: 20,
-    flex:1,
-    flexDirection: 'column',
-     justifyContent: 'space-between',
-  },
-  button:{
-    marginBottom: 5,
-    marginTop: 5
-  },
-  headline: {
-    textAlign: 'center', // <-- the magic
-    fontWeight: 'bold',
-    fontSize: 18,
+  container:{
 
-    backgroundColor: 'yellow',
+  },
+  header:{
+    backgroundColor: "#DCDCDC",
+    paddingTop: 10
+  },
+  headerContent:{
+    padding:10,
+    alignItems: 'center',
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: "white",
+    marginBottom:5,
+  },
+  name:{
+    fontSize:22,
+    color:"#000000",
+    fontWeight:'600',
+  },
+  userInfo:{
+    fontSize:16,
+    color:"#778899",
+    fontWeight:'600',
+    marginBottom: 5
+  },
+  body:{
+    flex:1,
+    backgroundColor: "#778899",
+    alignItems:'center',
+    paddingBottom: 20
+  },
+  item:{
+    flexDirection : 'row',
+  },
+  infoContent:{
+    flex:1,
+    alignItems:'flex-start',
+    paddingLeft:5
+  },
+  iconContent:{
+    flex:1,
+    alignItems:'flex-end',
+    paddingRight:5,
+  },
+  icon:{
+    width:30,
+    height:30,
+    marginTop:20,
+  },
+  info:{
+    fontSize:18,
+    marginTop:20,
+    color: "#FFFFFF",
   }
 });
+
 function mapStateToProps (state) {
   return {
     habits: state.habits

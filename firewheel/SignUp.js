@@ -6,19 +6,27 @@ import ErrorMessages from './constants/errors';
 
 const Form = t.form.Form;
 
+var options = {
+  fields: {
+    password: {
+      secureTextEntry: true
+    }
+  }
+};
+
 const User = t.struct({
+  name: t.String,
   email: t.String,
-  username: t.String,
   password: t.String,
-  terms: t.Boolean
 });
 
 class SignUp extends React.Component {
+  state={
+    errorMessage: ''
+  }
   static navigationOptions = {
     title: 'Welcome',
   };
-
-
 
   handleSubmit = () => {
     const value = this._form.getValue();
@@ -41,9 +49,12 @@ class SignUp extends React.Component {
               lastName,
               signedUp: Firebase.database.ServerValue.TIMESTAMP,
               lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP,
-            }).then(() => statusMessage(dispatch, 'loading', false).then(resolve));
+            }).then(() => statusMessage(dispatch, 'loading', false).then(resolve))
+            ;
           }
-    });
+        })
+        .catch(error => this.setState({ errorMessage: error.message }))
+    ;
 
   }
 
@@ -59,13 +70,14 @@ class SignUp extends React.Component {
       <View style={styles.container}>
         <View style={styles.logo}>
           <Image source={require('./logo.png')} style={{width:100, height:100, }} />
-          <Text>Fire-Wheel</Text>
+          <Text>FireWheel</Text>
         </View>
 
-        <Text>{this.props.emai} </Text>
-        <Form type={User} ref={ c => this._form = c }/>
-        <Button title="Sign up" onPress={this.handleSubmit}/>
-        <Button title="Sign In" onPress={this.handleSignin}/>
+        <Text style={{color:'red'}}>{this.state.errorMessage}</Text>
+        <Text>{this.props.email} </Text>
+        <Form type={User} ref={ c => this._form = c } options={options}/>
+        <Button title="Create" onPress={this.handleSubmit}/>
+        <Button title="I have an account already" onPress={this.handleSignin}/>
       </View>
     );
   }
@@ -74,9 +86,10 @@ class SignUp extends React.Component {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginTop: 50,
+    marginTop: 20,
     padding: 20,
     backgroundColor: '#ffffff',
+    marginBottom: 0
   },
   logo:{
     alignItems: 'center',
