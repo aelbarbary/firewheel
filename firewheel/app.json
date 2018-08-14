@@ -4,7 +4,7 @@
     "description": "FireWheel is an app to track and cultivate your good habits",
     "icon": "./logo.png",
     "version": "1.0.0",
-    "slug": "your-app-slug",
+    "slug": "Firewheel",
     "sdkVersion": "27.0.0",
     "ios": {
       "bundleIdentifier": "com.abdel.firewheel"

@@ -1,4 +1,12 @@
-import { FETCHING_HABITS, ADDING_HABIT, DELETING_HABIT, EDITING_HABIT, LOG_HABIT, FETCHING_HABITS_LOGS, DELETING_HABIT_LOG } from './Constants'
+import { FETCHING_HABITS,
+        ADDING_HABIT,
+        DELETING_HABIT,
+        EDITING_HABIT,
+        LOG_HABIT,
+        FETCHING_HABITS_LOGS,
+        DELETING_HABIT_LOG,
+        FETCHING_HABITS_STATS } from './Constants'
+
 import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchHabitsFromStore() {
   return (dispatch) => {
@@ -11,25 +19,36 @@ export function fetchHabitsFromStore() {
     var date = new Date();
     dateKey = formatDate(date);
 
+
+
     return ref.on('value', (snapshot) => {
 
       var habits = [];
       snapshot.forEach(function(habit) {
         habitObject = habit.val();
         habitObject.key = habit.key;
-        var totalTime = 0;
+        var totalTimeToday = 0;
+        var overallSpentMinutes = 0 ;
+
+        var habitRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs`);
+        habitRef.on('child_added', function(log) {
+          for (key in log.val()){
+            overallSpentMinutes += log.val()[key].hours * 60 + log.val()[key].minutes;
+          }
+        });
 
         const logsRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs/${dateKey}`);
 
         logsRef.on('value', (snapshotLog) => {
           snapshotLog.forEach(function(habitLog) {
 
-            totalTime += habitLog.val().hours * 60 + habitLog.val().minutes;
+            totalTimeToday += habitLog.val().hours * 60 + habitLog.val().minutes;
 
           });
         });
 
-        habitObject.totalTime = totalTime
+        habitObject.overallSpentMinutes = overallSpentMinutes;
+        habitObject.totalTime = totalTimeToday
         habits.push(habitObject);
       });
 
@@ -51,7 +70,7 @@ export function getHabitLogsFromStore(habitKey) {
     var date = new Date();
     dateKey = formatDate(date);
     const ref = FirebaseRef.child(`habits/${UID}/${habitKey}/logs/${dateKey}`);
-    console.log(ref);
+
     var logs = [];
 
     return ref.on('value', (snapshot) => {
@@ -59,10 +78,10 @@ export function getHabitLogsFromStore(habitKey) {
       snapshot.forEach(function(log) {
         logObject = log.val();
         logObject.key = log.key;
-        console.log(logObject);
+
         logs.push(logObject);
       });
-      console.log(logs);
+
       return dispatch({
         type: FETCHING_HABITS_LOGS,
         data: logs,
@@ -70,6 +89,49 @@ export function getHabitLogsFromStore(habitKey) {
     });
   }
 }
+
+export function getHabitStatsFromStore() {
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    const ref = FirebaseRef.child(`habits/${UID}`);
+
+    var Stats = [];
+
+    return ref.on('value', (habits) => {
+
+      habits.forEach(function(habit) {
+        habitObject = habit.val();
+
+        statObject = {
+          habitName : habitObject.name,
+          totalMin:0
+        };
+
+        habit.child("logs").forEach(function(log){
+          logObject = log.val();
+
+          log.getChildren().forEach(function(logEntry){
+
+
+          });
+
+        })
+
+        Stats.push(habitObject);
+      });
+
+      return dispatch({
+        type: FETCHING_HABITS_STATS,
+        data: habits,
+      });
+    });
+  }
+}
+
 
 export function deleteHabitLogFromStore(habitKey, habitLogKey){
   return (dispatch) => {
@@ -82,12 +144,12 @@ export function deleteHabitLogFromStore(habitKey, habitLogKey){
     dateKey = formatDate(date);
 
     var ref = FirebaseRef.child(`habits/${UID}/${habitKey}/logs/${dateKey}`);
-    console.log(habitLogKey);
+
     ref.child(habitLogKey).remove();
 
 
     ref = FirebaseRef.child(`habits/${UID}/${habitKey}/logs/${dateKey}`);
-    console.log(ref);
+
     var logs = [];
 
     return ref.on('value', (snapshot) => {
@@ -95,10 +157,10 @@ export function deleteHabitLogFromStore(habitKey, habitLogKey){
       snapshot.forEach(function(log) {
         logObject = log.val();
         logObject.key = log.key;
-        console.log(logObject);
+
         logs.push(logObject);
       });
-      console.log(logs);
+
       return dispatch({
         type: FETCHING_HABITS_LOGS,
         data: logs,

@@ -16,7 +16,7 @@ export default function habitsReducer (state = initialState, action) {
       case DELETING_HABIT_LOG:
         return {
           ...state,
-          habitLogs: action.data
+          habitLogs: action.data.FILTER
         }
 
 

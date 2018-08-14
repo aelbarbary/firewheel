@@ -125,7 +125,6 @@ class Habit extends React.Component {
               name='delete'
             />
           </TouchableHighlight>
-
         </View>
 
       </Card>

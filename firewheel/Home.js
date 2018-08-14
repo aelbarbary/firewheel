@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, RefreshControl, Image} from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, Image, TouchableHighlight} from 'react-native'
 import { Button, Card, ListItem, Icon } from 'react-native-elements'
 import {Firebase} from './lib/firebase'
 import { fetchHabitsFromStore, addHabitToStore } from './actions'
@@ -35,11 +35,11 @@ class Home extends React.Component {
   }
 
   navigateToSplashScreen(){
-        this.forceUpdate();
-        this.props.navigation.navigate('Loading')
+        this.props.navigation.navigate('Loading');
+
   }
 
-  logout(navigation){
+  logout(){
     Firebase.auth().signOut().then(this.navigateToSplashScreen, function(error) {
     });
   }
@@ -76,8 +76,6 @@ class Home extends React.Component {
     });
 
     var progress = Math.round((doneTime / allTime) * 5);
-
-    console.log(progress);
 
     return (
       <View style={{flex:1}}>
@@ -129,16 +127,32 @@ class Home extends React.Component {
 
           <View style={styles.body}>
             <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
-             <ScrollView >
+             <ScrollView style={{margin:0, padding:0}}>
                  {
                    habits.length ? (
                      habits.map((habit, i) => {
-                       return <Habit key={habit.key} habit={habit} style={{margin:0}} navigation={this.props.navigation}/>
+                       return <Habit key={habit.key} habit={habit} style={styles.habit} navigation={this.props.navigation}/>
                      })
                    ) : null
                  }
                </ScrollView>
            </View>
+
+          </View>
+
+          <View style={styles.footer}>
+
+            <TouchableHighlight onPress={() => this.logout()}>
+              <Icon
+                name='exit-to-app'
+              />
+            </TouchableHighlight>
+
+            <TouchableHighlight onPress={() => this.props.navigation.navigate('Stats', { habits: habits }) } >
+              <Icon
+                name='timeline'
+              />
+            </TouchableHighlight>
 
           </View>
       </View>
@@ -148,7 +162,7 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container:{
-
+    margin: 0
   },
   header:{
     backgroundColor: "#DCDCDC",
@@ -178,10 +192,16 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   body:{
-    flex:1,
+    flex:8,
     backgroundColor: "#778899",
     alignItems:'center',
-    paddingBottom: 20
+    paddingBottom: 20,
+    margin:0,
+    padding: 0
+  },
+  habit:{
+    margin: 0,
+    padding:0
   },
   item:{
     flexDirection : 'row',
@@ -205,6 +225,13 @@ const styles = StyleSheet.create({
     fontSize:18,
     marginTop:20,
     color: "#FFFFFF",
+  },
+  footer:{
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'white'
   }
 });
 

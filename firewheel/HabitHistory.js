@@ -19,7 +19,7 @@ class HabitHistory extends React.Component {
 
   componentDidMount(){
     const { navigation } = this.props;
-    console.log(navigation);
+
     const habitKey = navigation.getParam('habitKey', 'NO-KEY');
 
     this.props.getHabitLogs(habitKey);
@@ -28,11 +28,9 @@ class HabitHistory extends React.Component {
   render () {
 
     const {habitLogs} = this.props.habitLogs;
-    console.log("habit logs");
-    console.log(habitLogs);
 
     const { navigation } = this.props;
-    console.log(navigation);
+
     const habitKey = navigation.getParam('habitKey', 'NO-KEY');
 
     return <View>
@@ -44,18 +42,22 @@ class HabitHistory extends React.Component {
               {
                 habitLogs.length ? (
                   habitLogs.map((habitLog, i) => {
-                    return <View style={{flex:1}} key={i}>
-                            <Text >{habitLog.date}</Text>
-                            <Text >{habitLog.hours }</Text>
-                            <Text >{habitLog.minutes}</Text>
-                            <TouchableHighlight onPress={() => {
-                                this.props.deleteHabitLog(habitKey, habitLog.key);
-                              }
-                              }>
-                              <Icon
-                                name='delete'
-                              />
-                            </TouchableHighlight>
+                    return <View style={{flex:1, flexDirection:'column'}} key={i}>
+                                <Text style={{fontWeight:'bold'}}>{habitLog.date}</Text>
+                                <View style={{flex:1, flexDirection: 'row'}}>
+                                  <Text >{habitLog.hours }:</Text>
+                                  <Text >{habitLog.minutes}</Text>
+                                </View>
+
+                              <TouchableHighlight onPress={() => {
+                                  this.props.deleteHabitLog(habitKey, habitLog.key);
+                                }
+                                }>
+                                <Icon
+                                  name='delete'
+                                />
+                              </TouchableHighlight>
+
                           </View>
                   })
                 ) : null
