@@ -79,6 +79,7 @@ class Home extends React.Component {
 
     return (
       <View style={{flex:1}}>
+
           <Modal
           animationType="slide"
           transparent={false}
@@ -124,7 +125,7 @@ class Home extends React.Component {
                                                          }}></Button>
             </View>
           </View>
-
+          <Button onPress={()=> this.props.navigation.navigate('History', {habits: habits})} title="History" buttonStyle={styles.historyButton}></Button>
           <View style={styles.body}>
             <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
              <ScrollView style={{margin:0, padding:0}}>
@@ -232,6 +233,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
     backgroundColor: 'white'
+  },
+  historyButton:{
+    backgroundColor: 'orange'
   }
 });
 
