@@ -87,7 +87,7 @@ class Habit extends React.Component {
 
       <Card style={{padding:0}}>
 
-        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  color={'gray'}  width={width-60}/>
+        <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  color={'#243350'}  width={width-60}/>
 
         <View>
           {/*
@@ -105,26 +105,33 @@ class Habit extends React.Component {
         </View>
 
         <View style={styles.buttonContainer}>
-
+          <View >
           <TouchableHighlight onPress={() => this.setModalVisible(!this.state.modalVisible)}>
             <Icon
               name='access-time'
+              color='#245B29'
             />
           </TouchableHighlight>
+          </View>
 
+          <View >
           <TouchableHighlight onPress={() => this.props.navigation.navigate('HabitHistory', {
               habitKey: habit.key
               })}>
             <Icon
               name='edit'
+              color='#263280'
             />
           </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => this.deleteHabit(habit.key)}>
-            <Icon
-              name='delete'
-            />
-          </TouchableHighlight>
+          </View>
+          <View >
+            <TouchableHighlight onPress={() => this.deleteHabit(habit.key)}>
+              <Icon
+                name='delete'
+                color='#800000'
+              />
+            </TouchableHighlight>
+          </View>
         </View>
 
       </Card>
@@ -141,7 +148,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 0
+    marginTop: 0,
+    justifyContent:'space-between'
   },
   textInput:{
     borderColor:'gray',

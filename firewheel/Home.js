@@ -119,13 +119,20 @@ class Home extends React.Component {
                           progress ==  1 ? Images.image1 :
                           Images.image0}/>
                 <Text style={styles.userInfo}> {Firebase.auth().currentUser.email} </Text>
+
+                <View style={{flexDirection: 'row'}}>
                 <Button title="Add a habit" onPress={() => {
                                                           this.setState({isEditing: false});
                                                            this.setModalVisible(true);
-                                                         }}></Button>
-            </View>
+                                                         }} buttonStyle={styles.newButton}>
+                </Button>
+                <Button onPress={()=> this.props.navigation.navigate('History', {habits: habits})}
+                  title="History" buttonStyle={styles.historyButton}>
+                </Button>
+                </View>
+              </View>
           </View>
-          <Button onPress={()=> this.props.navigation.navigate('History', {habits: habits})} title="History" buttonStyle={styles.historyButton}></Button>
+
           <View style={styles.body}>
             <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
              <ScrollView style={{margin:0, padding:0}}>
@@ -167,11 +174,14 @@ const styles = StyleSheet.create({
   },
   header:{
     backgroundColor: "#DCDCDC",
-    paddingTop: 10
+    paddingTop: 10,
+    flex: 2,
+    flexDirection: 'column',
   },
   headerContent:{
-    padding:10,
+    padding:5,
     alignItems: 'center',
+
   },
   avatar: {
     width: 60,
@@ -235,8 +245,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   historyButton:{
-    backgroundColor: 'orange'
+    backgroundColor: 'orange',
+    width:150
+  },
+  newButton:{
+    backgroundColor: 'green',
+    width:150
   }
+
 });
 
 function mapStateToProps (state) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View , StyleSheet, TextInput, Text, TouchableHighlight, Image, ScrollView} from 'react-native'
-import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button } from 'react-native-elements'
+import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button, List, ListItem } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
 import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
@@ -24,7 +24,7 @@ class History extends React.Component {
         date.setDate(date.getDate() + 1);
      }
      return days;
-}
+  }
 
   render () {
 
@@ -37,19 +37,18 @@ class History extends React.Component {
     habits.forEach(function(habit){
       habitsTotalTime += habit.time;
     });
-    this.getDaysInMonth(7,2018).forEach(function(ele){
+    this.getDaysInMonth(new Date().getMonth(),new Date().getYear() + 1900).forEach(function(ele){
+      var today = Moment(ele).format('YYYY-MM-DD').substring(0,10);
+      scoreByDay[today] = {
+        time: 0,
+        expectedTime: habitsTotalTime
+      }
       habits.forEach(function(habit){
-
-          for (var key in habit.logs){
-            if (key == Moment(ele).format('YYYY-MM-DD').substring(0,10)){
-                for (var logKey in habit.logs[key]){
-                  var logEntry = habit.logs[key][logKey]
-                  if (key in scoreByDay){
-                    scoreByDay[key]["time"] += logEntry.minutes + logEntry.hours * 60;
-                  }
-                  else{
-                    scoreByDay[key] = { time: logEntry.minutes + logEntry.hours * 60, expectedTime: habitsTotalTime} ;
-                  }
+          for (var day in habit.logs){
+            if (day == today){
+                for (var logKey in habit.logs[day]){
+                  var logEntry = habit.logs[day][logKey]
+                  scoreByDay[day]["time"] += logEntry.minutes + logEntry.hours * 60;
                 }
             }
           }
@@ -64,28 +63,28 @@ class History extends React.Component {
 
    return (
       <View style={styles.container}>
-      <View style={{flex:0, flexDirection: 'row', justifyContent: 'space-between', padding:20}} key={key}>
-        <Text style={styles.header}>Day</Text>
-        <Text style={styles.header}> Total Time</Text>
-        <Text style={styles.header}>Mode</Text>
-      </View>
+
         <ScrollView style={{margin:0, padding:0, flex: 10}}>
+        <List containerStyle={{marginBottom: 20}}>
         {
 
                Object.keys(scoreByDay).map((key, index) => (
-                <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-between', padding: 20}} key={key}>
-                  <Text> {key}</Text>
-                  <Text> {scoreByDay[key]["time"]}</Text>
-                  <Image style={styles.avatar}
-                    source={ scoreByDay[key]["score"] >= 5 ? Images.image5 :
-                            scoreByDay[key]["score"]  == 4 ? Images.image4  :
-                            scoreByDay[key]["score"]  == 3 ? Images.image3  :
-                            scoreByDay[key]["score"]  ==  2 ? Images.image2 :
-                            scoreByDay[key]["score"]  ==  1 ? Images.image1 :
-                            Images.image0}/>
-                </View>
+                 <ListItem
+                   roundAvatar
+                   avatar={
+                     scoreByDay[key]["score"] >= 5 ? Images.image5 :
+                             scoreByDay[key]["score"]  == 4 ? Images.image4  :
+                             scoreByDay[key]["score"]  == 3 ? Images.image3  :
+                             scoreByDay[key]["score"]  ==  2 ? Images.image2 :
+                             scoreByDay[key]["score"]  ==  1 ? Images.image1 :
+                             Images.image0
+                   }
+                   key={index}
+                   title= {`Time Spent ${scoreByDay[key]["time"]}`}
+                 />
               ))
         }
+        </List>
         </ScrollView>
       </View>
    )
@@ -103,7 +102,8 @@ const styles = StyleSheet.create({
   },
   avatar:{
     width: 20,
-    height:20
+    height:20,
+    backgroundColor: 'white'
   }
 
 })
