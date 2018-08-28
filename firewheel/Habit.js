@@ -58,7 +58,8 @@ class Habit extends React.Component {
           alert('Modal has been closed.');
         }}>
         <View>
-          <FormLabel>Duration</FormLabel>
+          <Text style={{fontWeight: 'bold', fontSize: 30, textAlign: 'center',}}>Log Time</Text>
+          <FormLabel>Duration (hours : minutes)</FormLabel>
 
           <TimePicker
             selectedHours={selectedHours}
@@ -85,7 +86,7 @@ class Habit extends React.Component {
         </View>
       </Modal>
 
-      <Card style={{padding:0}}>
+      <Card containerStyle={styles.cardStyle}>
 
         <Progress.Bar progress={habit.time == 0 ? 0 : habit.totalTime/habit.time}  color={'#243350'}  width={width-60}/>
 
@@ -108,8 +109,8 @@ class Habit extends React.Component {
           <View >
           <TouchableHighlight onPress={() => this.setModalVisible(!this.state.modalVisible)}>
             <Icon
-              name='access-time'
-              color='#245B29'
+              name='fire'
+              type='font-awesome'
             />
           </TouchableHighlight>
           </View>
@@ -119,16 +120,25 @@ class Habit extends React.Component {
               habitKey: habit.key
               })}>
             <Icon
-              name='edit'
-              color='#263280'
+              name='history'
+
+              type='font-awesome'
             />
           </TouchableHighlight>
           </View>
+
+          <View >
+            <TouchableHighlight onPress={() => this.setModalVisible(true)}>
+              <Icon
+                name='edit'
+              />
+            </TouchableHighlight>
+          </View>
+
           <View >
             <TouchableHighlight onPress={() => this.deleteHabit(habit.key)}>
               <Icon
                 name='delete'
-                color='#800000'
               />
             </TouchableHighlight>
           </View>
@@ -145,10 +155,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  cardStyle:{
+    backgroundColor: '#eeeeee'
+  },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 0,
+    marginTop: 10,
     justifyContent:'space-between'
   },
   textInput:{

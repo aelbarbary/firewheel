@@ -179,10 +179,11 @@ const styles = StyleSheet.create({
   },
   header:{
     backgroundColor: "#DCDCDC",
-    paddingTop: 10,
+    paddingTop: 5,
+    marginTop: 10
   },
   headerContent:{
-    padding:5,
+    padding:2,
     alignItems: 'center',
 
   },
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   },
   body:{
     flex:1,
-    backgroundColor: "#778899",
+    backgroundColor: "#FFFFFF",
     alignItems:'center',
     paddingBottom: 20,
     margin:0,
