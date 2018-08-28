@@ -117,19 +117,8 @@ class Home extends React.Component {
                           progress == 3 ? Images.image3  :
                           progress ==  2 ? Images.image2 :
                           progress ==  1 ? Images.image1 :
-                          Images.image0}/>
+                          Images.image0 }/>
                 <Text style={styles.userInfo}> {Firebase.auth().currentUser.email} </Text>
-
-                <View style={{flexDirection: 'row'}}>
-                <Button title="Add a habit" onPress={() => {
-                                                          this.setState({isEditing: false});
-                                                           this.setModalVisible(true);
-                                                         }} buttonStyle={styles.newButton}>
-                </Button>
-                <Button onPress={()=> this.props.navigation.navigate('History', {habits: habits})}
-                  title="History" buttonStyle={styles.historyButton}>
-                </Button>
-                </View>
               </View>
           </View>
 
@@ -156,6 +145,22 @@ class Home extends React.Component {
               />
             </TouchableHighlight>
 
+            <TouchableHighlight onPress={() => {
+                                                      this.setState({isEditing: false});
+                                                       this.setModalVisible(true);
+                                                     }}>
+              <Icon
+                name='add'
+              />
+            </TouchableHighlight>
+
+            <TouchableHighlight onPress={()=> this.props.navigation.navigate('History', {habits: habits})}>
+              <Icon
+                name='history'
+              />
+            </TouchableHighlight>
+
+
             <TouchableHighlight onPress={() => this.props.navigation.navigate('Stats', { habits: habits }) } >
               <Icon
                 name='timeline'
@@ -175,8 +180,6 @@ const styles = StyleSheet.create({
   header:{
     backgroundColor: "#DCDCDC",
     paddingTop: 10,
-    flex: 2,
-    flexDirection: 'column',
   },
   headerContent:{
     padding:5,
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   body:{
-    flex:8,
+    flex:1,
     backgroundColor: "#778899",
     alignItems:'center',
     paddingBottom: 20,
@@ -238,11 +241,12 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   footer:{
-    flex:1,
+    margin: 10,
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: 'white'
+    
   },
   historyButton:{
     backgroundColor: 'orange',

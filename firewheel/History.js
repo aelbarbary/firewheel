@@ -80,7 +80,7 @@ class History extends React.Component {
                              Images.image0
                    }
                    key={index}
-                   title= {`Time Spent ${scoreByDay[key]["time"]}`}
+                   title= {`${key}: Time Spent ${scoreByDay[key]["time"]}`}
                  />
               ))
         }
