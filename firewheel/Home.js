@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    borderWidth: 2,
+    borderWidth: 0,
     borderColor: "white",
     marginBottom:5,
   },
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
-    
+
   },
   historyButton:{
     backgroundColor: 'orange',

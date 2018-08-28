@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View , StyleSheet, TextInput, Text, TouchableHighlight, Image, ScrollView} from 'react-native'
-import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button, List, ListItem } from 'react-native-elements'
+import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button, List, ListItem, Avatar } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
 import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
@@ -71,13 +71,15 @@ class History extends React.Component {
                Object.keys(scoreByDay).map((key, index) => (
                  <ListItem
                    roundAvatar
+
                    avatar={
-                     scoreByDay[key]["score"] >= 5 ? Images.image5 :
-                             scoreByDay[key]["score"]  == 4 ? Images.image4  :
-                             scoreByDay[key]["score"]  == 3 ? Images.image3  :
-                             scoreByDay[key]["score"]  ==  2 ? Images.image2 :
-                             scoreByDay[key]["score"]  ==  1 ? Images.image1 :
-                             Images.image0
+                     <Avatar rounded medium
+                        source={scoreByDay[key]["score"] >= 5 ? Images.image5 :
+                                scoreByDay[key]["score"]  == 4 ? Images.image4  :
+                                scoreByDay[key]["score"]  == 3 ? Images.image3  :
+                                scoreByDay[key]["score"]  ==  2 ? Images.image2 :
+                                scoreByDay[key]["score"]  ==  1 ? Images.image1 :
+                                Images.image0} />
                    }
                    key={index}
                    title= {`${key}: Time Spent ${scoreByDay[key]["time"]}`}
