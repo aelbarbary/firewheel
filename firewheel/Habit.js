@@ -4,36 +4,55 @@ import { View , StyleSheet, TextInput, Text, TouchableHighlight} from 'react-nat
 import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button } from 'react-native-elements'
 import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
-import { deleteHabitFromStore, editTimeInStore, editNameInStore, logHabitInStore } from './actions'
+import { deleteHabitFromStore, editHabitInStore, logHabitInStore } from './actions'
 import Modal from "react-native-modal";
 import TimePicker from 'react-native-simple-time-picker';
 import * as Progress from 'react-native-progress';
 import { Dimensions } from "react-native";
+import t from 'tcomb-form-native';
+
+
+const Form = t.form.Form;
+
+const HabitModel = t.struct({
+  name: t.String,
+  time: t.Number
+});
 
 class Habit extends React.Component {
   state = {
     modalVisible: false,
-    logDescription: ''
+    editHabitModalVisible : false,
+    logDescription: '',
+    habit: { name: this.props.habit.name, time: this.props.habit.time}
   };
 
   constructor(props) {
     super(props);
 
   }
+
   deleteHabit(key){
     this.props.deleteHabit(key)
   }
 
-  editName(key, newName){
-    this.props.editName(key, newName);
-  }
+  editHabit(){
+    const newValue = this._form.getValue();
+    console.log("new value");
+    console.log(newValue);
+    if (newValue) {
 
-  editTime(key, newTime){
-    this.props.editTime(key, newTime);
+      this.props.editHabit(this.props.habit.key, newValue);
+      this.setEditHabitModalVisible(false);
+    }
   }
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
+  }
+
+  setEditHabitModalVisible(visible) {
+    this.setState({editHabitModalVisible: visible});
   }
 
   logHabit(key, hours, minutes){
@@ -41,11 +60,15 @@ class Habit extends React.Component {
       this.setModalVisible(false);
   }
 
+  changeHabit(value) {
+
+      this.setState({habit: value});
+  }
 
   render () {
 
     const { habit } = this.props;
-
+    console.log(this.state.habit);
     const { selectedHours, selectedMinutes } = this.state;
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
@@ -85,6 +108,40 @@ class Habit extends React.Component {
           </Button>
         </View>
       </Modal>
+
+      <Modal
+      animationType="slide"
+      transparent={false}
+      visible={this.state.editHabitModalVisible}
+      onRequestClose={() => {
+        alert('Modal has been closed.');
+      }}>
+      <View style={{marginTop: 22}}>
+        <View>
+          <Form type={HabitModel} ref={ c => this._form = c } value={this.props.habit} onChange={() => this.changeHabit }/>
+          <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+            <Button
+              onPress={() => {
+                console.log("pressed");
+                this.editHabit();
+              }}
+              title='Save'
+              style={styles.button}
+              backgroundColor='green'>
+            </Button>
+
+            <Button
+              onPress={() => {
+                this.setEditHabitModalVisible(!this.state.editHabitModalVisible);
+              }}
+              title='Cancel'
+              style={styles.button}
+              backgroundColor='red'>
+            </Button>
+          </View>
+        </View>
+      </View>
+    </Modal>
 
       <Card containerStyle={styles.cardStyle}>
 
@@ -128,7 +185,7 @@ class Habit extends React.Component {
           </View>
 
           <View >
-            <TouchableHighlight onPress={() => this.setModalVisible(true)}>
+            <TouchableHighlight onPress={() => this.setEditHabitModalVisible(true)}>
               <Icon
                 name='edit'
               />
@@ -150,7 +207,6 @@ class Habit extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
   colContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -173,7 +229,8 @@ const styles = StyleSheet.create({
   button:{
       padding: 5,
       borderWidth: 0,
-      borderRadius: 5
+      borderRadius: 5,
+      width: 100
   },
   habitText:{
     flex: 1,
@@ -192,8 +249,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return {
     deleteHabit :  (key) =>  { dispatch(deleteHabitFromStore(key)) },
-    editName :  (key, newName) =>  { dispatch(editNameInStore(key, newName)) },
-    editTime :  (key, newTime) =>  { dispatch(editTimeInStore(key, newTime)) },
+    editHabit :  (key, habitObject) =>  { dispatch(editHabitInStore(key, habitObject)) },
     logHabit: (key, hours, minutes, description) => { dispatch(logHabitInStore(key, hours, minutes, description)) }
   }
 }

@@ -44,6 +44,7 @@ class HabitHistory extends React.Component {
                   habitLogs.map((habitLog, i) => {
                     return <View style={{flex:1, flexDirection:'column'}} key={i}>
                                 <Text style={{fontWeight:'bold'}}>{habitLog.date}</Text>
+                                <Text style={{fontWeight:'bold', color:'green'}}>{habitLog.description}</Text>
                                 <View style={{flex:1, flexDirection: 'row'}}>
                                   <Text >{habitLog.hours }:</Text>
                                   <Text >{habitLog.minutes}</Text>

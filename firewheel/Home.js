@@ -90,21 +90,25 @@ class Home extends React.Component {
           <View style={{marginTop: 22}}>
             <View>
               <Form type={HabitModel} ref={ c => this._form = c }/>
-              <Button
-                onPress={() => {
-                  this.addHabit();
-                }}
-                title='Save'
-                style={styles.button}>
-              </Button>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Button
+                  onPress={() => {
+                    this.addHabit();
+                  }}
+                  title='Save'
+                  style={styles.button}
+                  backgroundColor='green'>
+                </Button>
 
-              <Button
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}
-                title='Cancel'
-                style={styles.button}>
-              </Button>
+                <Button
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                  title='Cancel'
+                  style={styles.button}
+                  backgroundColor='red'>
+                </Button>
+              </View>
             </View>
           </View>
         </Modal>
@@ -124,7 +128,7 @@ class Home extends React.Component {
 
           <View style={styles.body}>
             <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
-             <ScrollView style={{margin:0, padding:0}}>
+             <ScrollView style={{margin:0, padding:0}} >
                  {
                    habits.length ? (
                      habits.map((habit, i) => {
@@ -174,6 +178,9 @@ class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  button:{
+    width: 100,
+  },
   container:{
     margin: 0
   },

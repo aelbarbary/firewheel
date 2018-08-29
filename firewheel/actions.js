@@ -19,8 +19,6 @@ export function fetchHabitsFromStore() {
     var date = new Date();
     dateKey = formatDate(date);
 
-
-
     return ref.on('value', (snapshot) => {
 
       var habits = [];
@@ -222,9 +220,8 @@ export function deleteHabitFromStore(key){
   }
 }
 
-export function editNameInStore(key, newName){
+export function editHabitInStore(key, habitObject){
   return (dispatch) => {
-
     const UID = Firebase.auth().currentUser.uid;
     if (!UID)
       return false;
@@ -232,27 +229,8 @@ export function editNameInStore(key, newName){
     const ref = FirebaseRef.child(`habits/${UID}/${key}`);
 
     ref.update({
-      name: newName
-    });
-
-    return dispatch({
-      type: EDITING_HABIT,
-    });
-
-  }
-}
-
-export function editTimeInStore(key, newTime){
-  return (dispatch) => {
-
-    const UID = Firebase.auth().currentUser.uid;
-    if (!UID)
-      return false;
-
-    const ref = FirebaseRef.child(`habits/${UID}/${key}`);
-
-    ref.update({
-      time: newTime
+      name: habitObject.name,
+      time: habitObject.time
     });
 
     return dispatch({
