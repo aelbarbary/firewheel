@@ -6,8 +6,8 @@ import SignUp from './SignUp'
 import SignIn from './SignIn'
 import Home from './Home'
 import Splash from './Splash'
-import HabitHistory from './HabitHistory'
-import History from './History'
+import HabitDailyLog from './HabitDailyLog'
+import MonthlyHistory from './MonthlyHistory'
 import Stats from './Stats'
 import {Provider} from 'react-redux'
 import configureStore from './ConfigureStore'
@@ -17,8 +17,8 @@ const RootStack = createStackNavigator({
   SignUp: { screen: SignUp },
   SignIn: { screen: SignIn },
   Home: { screen: Home },
-  HabitHistory: {screen: HabitHistory},
-  History: {screen: History},
+  HabitDailyLog: {screen: HabitDailyLog},
+  MonthlyHistory: {screen: MonthlyHistory},
   Stats: {screen: Stats},
 });
 

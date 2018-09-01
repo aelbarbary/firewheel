@@ -12,9 +12,11 @@ import { Dimensions } from "react-native";
 import Moment from 'moment';
 import Images from './img/index';
 
-class History extends React.Component {
+class MonthlyHistory extends React.Component {
 
-
+  static navigationOptions = {
+    title: 'Monthly History',
+  };
 
   getDaysInMonth(month, year) {
      var date = new Date(year, month, 1);
@@ -63,7 +65,7 @@ class History extends React.Component {
 
    return (
       <View style={styles.container}>
-
+        
         <ScrollView style={{margin:0, padding:0, flex: 10}}>
         <List containerStyle={{marginBottom: 20}}>
         {
@@ -71,7 +73,6 @@ class History extends React.Component {
                Object.keys(scoreByDay).map((key, index) => (
                  <ListItem
                    roundAvatar
-
                    avatar={
                      <Avatar rounded medium
                         source={scoreByDay[key]["score"] >= 5 ? Images.image5 :
@@ -122,4 +123,4 @@ function mapDispatchToProps(dispatch){
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(History);
+export default connect(mapStateToProps, mapDispatchToProps)(MonthlyHistory);

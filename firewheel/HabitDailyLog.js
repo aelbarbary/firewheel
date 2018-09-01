@@ -6,7 +6,7 @@ import { Firebase } from './lib/firebase'
 import {connect} from 'react-redux'
 import { getHabitLogsFromStore, deleteHabitLogFromStore } from './actions'
 
-class HabitHistory extends React.Component {
+class HabitDailyLog extends React.Component {
   state = {
     modalVisible: false,
     logDescription: ''
@@ -90,4 +90,4 @@ function mapDispatchToProps(dispatch){
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HabitHistory);
+export default connect(mapStateToProps, mapDispatchToProps)(HabitDailyLog);

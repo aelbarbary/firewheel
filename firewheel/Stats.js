@@ -1,90 +1,112 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { View , StyleSheet, TextInput, Text, TouchableHighlight, ScrollView} from 'react-native'
-import { Icon, Card, FormInput, FormLabel, FormValidationMessage, Button } from 'react-native-elements'
-import { Firebase } from './lib/firebase'
-import {connect} from 'react-redux'
+// @flow
+'use strict';
 
-class HabitHistory extends React.Component {
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
+import AreaSpline from './charts/charts/AreaSpline';
+import Pie from './charts/charts/Pie';
+import Theme from './charts/theme';
+import data from './resources/data';
+
+type State = {
+  activeIndex: number,
+  spendingsPerYear: any
+}
+
+export default class Stats extends Component {
+
+  static navigationOptions = {
+    title: 'Statistics',
+  };
+
+  state: State;
 
   constructor(props) {
     super(props);
-
+    this.state = {
+      activeIndex: 0,
+      spendingsPerYear: data.spendingsPerYear,
+    };
+    this._onPieItemSelected = this._onPieItemSelected.bind(this);
+    this._shuffle = this._shuffle.bind(this);
   }
 
-  componentDidMount(){
-
+  _onPieItemSelected(newIndex){
+    this.setState({...this.state, activeIndex: newIndex, spendingsPerYear: this._shuffle(data.spendingsPerYear)});
   }
 
-  render () {
+  _shuffle(a) {
+      for (let i = a.length; i; i--) {
+          let j = Math.floor(Math.random() * i);
+          [a[i - 1], a[j]] = [a[j], a[i - 1]];
+      }
+      return a;
+  }
+
+  render() {
     const { navigation } = this.props;
 
     const habits = navigation.getParam('habits', 'NO-KEY');
-    console.log("stats");
     console.log(habits);
+    const height = 200;
+    const width = 500;
+    var habitsTotalTime = [];
+    var totalHabitTimeInMin = 0;
 
-    return <View style={styles.container}>
+    habits.map((habit, i) => {
+        totalHabitTimeInMin += habit.overallSpentMinutes;
+    });
 
-          {
-            habits.length ? (
-              habits.map((habit, i) => {
-                return <View  key={i}  style={styles.stat}>
-                      <Text style={styles.habitText}>{habit.name}</Text>
-                      <Text style={styles.totalTimeText}>{habit.overallSpentMinutes}</Text>
+    habits.map((habit, i) => {
 
-                    </View>
-              })
-            ) : null
-          }
+        habitsTotalTime.push( { "name": habit.name, "number": Math.round(habit.overallSpentMinutes/totalHabitTimeInMin * 100)  } );
+    });
 
-    </View>
+    console.log(habitsTotalTime);
+    return (
+      <ScrollView>
+        <View style={styles.container} >
+          <Text style={styles.chart_title}>Distribution of habits spent time</Text>
+          <Pie
+            pieWidth={150}
+            pieHeight={150}
+            onItemSelected={this._onPieItemSelected}
+            colors={Theme.colors}
+            width={width}
+            height={height}
+            data={habitsTotalTime} />
+          {/*}<Text style={styles.chart_title}>Spending per year in {habitsTotalTime[this.state.activeIndex].name}</Text>
+          <AreaSpline
+            width={width}
+            height={height}
+            data={this.state.spendingsPerYear}
+            color={Theme.colors[this.state.activeIndex]} /> */}
+        </View>
+      </ScrollView>
+    );
   }
 }
 
-const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    flexDirection: 'column'
+const styles = {
+  container: {
+    backgroundColor:'whitesmoke',
+    marginTop: 21,
   },
-  stat:{
-    flex:1,
-    flexDirection: 'row'
-  },
-  habitText:{
-    flex:1,
-    justifyContent: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    backgroundColor: 'gray',
-    padding: 10,
-    borderColor: 'black',
-    borderWidth: 1
-  },
-  totalTimeText:{
-    flex:1,
-    justifyContent: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    backgroundColor: 'white',
-    padding: 10,
-    borderColor: 'black',
-    borderWidth: 1
-  }
-
-
-});
-
-function mapStateToProps(state){
-  return{
-    habitStats: state.habitStats
+  chart_title : {
+    paddingTop: 15,
+    textAlign: 'center',
+    paddingBottom: 5,
+    paddingLeft: 5,
+    fontSize: 18,
+    backgroundColor:'white',
+    color: 'grey',
+    fontWeight:'bold',
   }
 }
-
-function mapDispatchToProps(dispatch){
-  return {
-
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(HabitHistory);

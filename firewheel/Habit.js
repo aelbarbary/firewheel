@@ -173,11 +173,11 @@ class Habit extends React.Component {
           </View>
 
           <View >
-          <TouchableHighlight onPress={() => this.props.navigation.navigate('HabitHistory', {
+          <TouchableHighlight onPress={() => this.props.navigation.navigate('HabitDailyLog', {
               habitKey: habit.key
               })}>
             <Icon
-              name='history'
+              name='list-ul'
 
               type='font-awesome'
             />

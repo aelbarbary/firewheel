@@ -158,7 +158,7 @@ class Home extends React.Component {
               />
             </TouchableHighlight>
 
-            <TouchableHighlight onPress={()=> this.props.navigation.navigate('History', {habits: habits})}>
+            <TouchableHighlight onPress={()=> this.props.navigation.navigate('MonthlyHistory', {habits: habits})}>
               <Icon
                 name='history'
               />
