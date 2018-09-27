@@ -54,7 +54,7 @@ export default class Stats extends Component {
     const { navigation } = this.props;
 
     const habits = navigation.getParam('habits', 'NO-KEY');
-    console.log(habits);
+
     const height = 200;
     const width = 500;
     var habitsTotalTime = [];
@@ -73,7 +73,7 @@ export default class Stats extends Component {
     return (
       <ScrollView>
         <View style={styles.container} >
-          <Text style={styles.chart_title}>Distribution of habits spent time</Text>
+          <Text style={styles.chart_title}>Time spent</Text>
           <Pie
             pieWidth={150}
             pieHeight={150}

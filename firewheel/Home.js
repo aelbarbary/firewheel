@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, RefreshControl, Image, TouchableHighlight} from 'react-native'
-import { Button, Card, ListItem, Icon } from 'react-native-elements'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, Image, TouchableHighlight, TextInput} from 'react-native'
+import { Button, Card, ListItem, Icon, FormLabel } from 'react-native-elements'
 import {Firebase} from './lib/firebase'
-import { fetchHabitsFromStore, addHabitToStore } from './actions'
+import { fetchHabitsFromStore, addHabitToStore, addCommentToStore } from './actions'
 import { connect } from 'react-redux'
 import Modal from "react-native-modal";
 import t from 'tcomb-form-native';
@@ -21,6 +21,8 @@ class Home extends React.Component {
     modalVisible: false,
     isEditing: false,
     refreshing: false,
+    commentModalVisible: false,
+    dailyComment: ''
   };
 
   static navigationOptions  = ({navigation}) => ({
@@ -56,6 +58,13 @@ class Home extends React.Component {
     }
   }
 
+  addComment(){
+    if (this.state.dailyComment) {
+      this.props.addComment(this.state.dailyComment);
+      this.setState({commentModalVisible: false});
+    }
+  }
+
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
@@ -63,6 +72,18 @@ class Home extends React.Component {
   onRefresh = () => {
     this.setState({refreshing: true});
     this.props.getHabits()
+  }
+
+  formatDate(date) {
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [year, month, day].join('-');
   }
 
   render() {
@@ -77,44 +98,96 @@ class Home extends React.Component {
 
     var progress = Math.round((doneTime / allTime) * 5);
 
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var today = new Date()
+    var day = days[today.getDay()];
+    var todayStr = this.formatDate(today);
+
     return (
-      <View style={{flex:1}}>
+      <View style={{justifyContent: 'space-between', flex: 1}}>
+
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                alert('Modal has been closed.');
+              }}>
+              <View style={{marginTop: 22}}>
+                <View>
+                  <Form type={HabitModel} ref={ c => this._form = c }/>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Button
+                      onPress={() => {
+                        this.addHabit();
+                      }}
+                      title='Save'
+                      style={styles.button}
+                      backgroundColor='green'>
+                    </Button>
+
+                    <Button
+                      onPress={() => {
+                        this.setModalVisible(!this.state.modalVisible);
+                      }}
+                      title='Cancel'
+                      style={styles.button}
+                      backgroundColor='red'>
+                    </Button>
+                  </View>
+                </View>
+              </View>
+            </Modal>
 
           <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}>
-          <View style={{marginTop: 22}}>
-            <View>
-              <Form type={HabitModel} ref={ c => this._form = c }/>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Button
-                  onPress={() => {
-                    this.addHabit();
-                  }}
-                  title='Save'
-                  style={styles.button}
-                  backgroundColor='green'>
-                </Button>
+            animationType="slide"
+            transparent={false}
+            visible={this.state.commentModalVisible}
+            onRequestClose={() => {
+              alert('Modal has been closed.');
+            }}>
+            <View style={{marginTop: 22}}>
+              <View>
+                <FormLabel>Daily Comment</FormLabel>
+                <TextInput
+                  style={styles.textArea}
+                  underlineColorAndroid="transparent"
+                  placeholder="Type something"
+                  placeholderTextColor="grey"
+                  numberOfLines={10}
+                  multiline={true}
+                  onChangeText={(value) => this.setState({ dailyComment: value })}
+                />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Button
+                    onPress={() => {
+                      this.addComment();
+                    }}
+                    title='Save'
+                    style={styles.button}
+                    backgroundColor='green'>
+                  </Button>
 
-                <Button
-                  onPress={() => {
-                    this.setModalVisible(!this.state.modalVisible);
-                  }}
-                  title='Cancel'
-                  style={styles.button}
-                  backgroundColor='red'>
-                </Button>
+                  <Button
+                    onPress={() => {
+                      this.setState({commentModalVisible: false});
+                    }}
+                    title='Cancel'
+                    style={styles.button}
+                    backgroundColor='red'>
+                  </Button>
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
 
           <View style={styles.header}>
-            <View style={styles.headerContent}>
+
+            <View style={styles.headerSub}>
+              <Icon name='time-slot' type='entypo' color='#f50'/>
+              <Text style={styles.headerSubFont}>{doneTime} min</Text>
+            </View>
+            <View style={styles.headerMain}>
                 <Image style={styles.avatar}
                   source={ progress >= 5 ? Images.image5 :
                           progress == 4 ? Images.image4  :
@@ -124,11 +197,23 @@ class Home extends React.Component {
                           Images.image0 }/>
                 <Text style={styles.userInfo}> {Firebase.auth().currentUser.email} </Text>
               </View>
+              <View style={styles.headerSub}>
+                <Icon name='calendar' type='entypo' color='#00aced'/>
+                <Text style={styles.headerSubFont}>{day}</Text>
+                <Text style={styles.headerSubFont}>{todayStr}</Text>
+              </View>
           </View>
 
           <View style={styles.body}>
             <View style={{flex:1, flexDirection: 'column', justifyContent:'space-between'}}>
-             <ScrollView style={{margin:0, padding:0}} >
+             <ScrollView style={{margin:0, padding:0}}
+
+               refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh}
+                  />
+                }>
                  {
                    habits.length ? (
                      habits.map((habit, i) => {
@@ -171,6 +256,12 @@ class Home extends React.Component {
               />
             </TouchableHighlight>
 
+            <TouchableHighlight onPress={() => this.setState({commentModalVisible: true}) } >
+              <Icon
+                name='comment'
+              />
+            </TouchableHighlight>
+
           </View>
       </View>
     );
@@ -185,14 +276,26 @@ const styles = StyleSheet.create({
     margin: 0
   },
   header:{
-    backgroundColor: "#DCDCDC",
-    paddingTop: 5,
-    marginTop: 10
-  },
-  headerContent:{
-    padding:2,
-    alignItems: 'center',
 
+    paddingTop: 15,
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent:'space-between',
+
+  },
+  headerMain:{
+    alignItems: 'center',
+  },
+  headerSub:{
+    height: 100,
+    width: 100,
+    alignItems:'center',
+    justifyContent:'center',
+    padding: 5
+  },
+  headerSubFont:{
+    fontSize: 10,
+    fontWeight: 'bold',
   },
   avatar: {
     width: 60,
@@ -263,6 +366,12 @@ const styles = StyleSheet.create({
   newButton:{
     backgroundColor: 'green',
     width:150
+  },
+  textArea: {
+    height: 150,
+    justifyContent: "flex-start",
+    borderWidth: 1,
+    borderColor: "gray",
   }
 
 });
@@ -277,6 +386,7 @@ function mapDispatchToProps (dispatch) {
   return {
     getHabits: () => dispatch(fetchHabitsFromStore()),
     addHabit: (name, time) => dispatch(addHabitToStore(name, time)),
+    addComment: (comment) => dispatch(addCommentToStore(comment)),
   }
 }
 

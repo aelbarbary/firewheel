@@ -11,7 +11,6 @@ import * as Progress from 'react-native-progress';
 import { Dimensions } from "react-native";
 import t from 'tcomb-form-native';
 
-
 const Form = t.form.Form;
 
 const HabitModel = t.struct({
@@ -38,8 +37,6 @@ class Habit extends React.Component {
 
   editHabit(){
     const newValue = this._form.getValue();
-    console.log("new value");
-    console.log(newValue);
     if (newValue) {
 
       this.props.editHabit(this.props.habit.key, newValue);
@@ -68,7 +65,6 @@ class Habit extends React.Component {
   render () {
 
     const { habit } = this.props;
-    console.log(this.state.habit);
     const { selectedHours, selectedMinutes } = this.state;
     var width = Dimensions.get('window').width;
     var height = Dimensions.get('window').height;
@@ -91,21 +87,32 @@ class Habit extends React.Component {
             />
 
           <FormLabel>Description</FormLabel>
-          <FormInput onChangeText={(text) => this.setState({logDescription : text}) }>
 
-          </FormInput>
+          <View style={styles.textAreaContainer} >
+            <TextInput
+              style={styles.textArea}
+              underlineColorAndroid="transparent"
+              placeholder="Type something"
+              placeholderTextColor="grey"
+              numberOfLines={10}
+              multiline={true}
+              onChangeText={(value) => this.setState({ logDescription: value })}
+            />
+          </View>
 
-          <Button
-            title="Save"
-            onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }
-            style={styles.button}>
-          </Button>
-          <Button
-            title="Cancel"
-            onPress={() => this.setModalVisible(false)
-             }
-             style={styles.button}>
-          </Button>
+          <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+            <Button
+              title="Save"
+              onPress={() => this.logHabit(habit.key, this.state.selectedHours, this.state.selectedMinutes) }
+              style={styles.button}>
+            </Button>
+            <Button
+              title="Cancel"
+              onPress={() => this.setModalVisible(false)
+               }
+               style={styles.button}>
+            </Button>
+          </View>
         </View>
       </Modal>
 
@@ -122,7 +129,6 @@ class Habit extends React.Component {
           <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
             <Button
               onPress={() => {
-                console.log("pressed");
                 this.editHabit();
               }}
               title='Save'
@@ -167,7 +173,7 @@ class Habit extends React.Component {
           <TouchableHighlight onPress={() => this.setModalVisible(!this.state.modalVisible)}>
             <Icon
               name='fire'
-              type='font-awesome'
+              type='simple-line-icon'
             />
           </TouchableHighlight>
           </View>
@@ -237,6 +243,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems:'center' ,
     justifyContent:'center'
+  },
+  textAreaContainer: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 5
+  },
+  textArea: {
+    height: 150,
+    justifyContent: "flex-start"
   }
 
 });

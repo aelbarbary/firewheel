@@ -75,8 +75,6 @@ class AreaSpline extends React.Component {
         .curve(d3.shape.curveNatural)
         (this.props.data)
 
-    // console.debug(`area: ${JSON.stringify(area)}`);
-
     return { path : area };
   }
 

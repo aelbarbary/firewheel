@@ -11,8 +11,14 @@ import * as Progress from 'react-native-progress';
 import { Dimensions } from "react-native";
 import Moment from 'moment';
 import Images from './img/index';
+import AreaSpline from './charts/charts/AreaSpline';
 
 class MonthlyHistory extends React.Component {
+
+  state={
+    currentMonth: new Date().getMonth(),
+    currentYear: new Date().getYear() + 1900
+  }
 
   static navigationOptions = {
     title: 'Monthly History',
@@ -21,14 +27,34 @@ class MonthlyHistory extends React.Component {
   getDaysInMonth(month, year) {
      var date = new Date(year, month, 1);
      var days = [];
-     while (date.getMonth() === month) {
+     var today = new Date().getDate();
+     while (date.getMonth() === month ) {
         days.push(new Date(date));
         date.setDate(date.getDate() + 1);
      }
      return days;
   }
 
+  prevMonth(currMonth){
+    this.setState({currentMonth: this.state.currentMonth -1});
+  }
+
+  nextMonth(currMonth){
+    this.setState({currentMonth: this.state.currentMonth +1});
+  }
+
+  getMonthName(monthNum){
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+
+    return monthNames[monthNum];
+  }
+
   render () {
+    const height = 200;
+    const width = 500;
 
     const { navigation } = this.props;
 
@@ -39,7 +65,8 @@ class MonthlyHistory extends React.Component {
     habits.forEach(function(habit){
       habitsTotalTime += habit.time;
     });
-    this.getDaysInMonth(new Date().getMonth(),new Date().getYear() + 1900).forEach(function(ele){
+
+    this.getDaysInMonth(this.state.currentMonth,new Date().getYear() + 1900).forEach(function(ele){
       var today = Moment(ele).format('YYYY-MM-DD').substring(0,10);
       scoreByDay[today] = {
         time: 0,
@@ -61,11 +88,42 @@ class MonthlyHistory extends React.Component {
     for( var key in scoreByDay){
       scoreByDay[key]["score"] = Math.round((scoreByDay[key]["time"] / scoreByDay[key]["expectedTime"]) * 5);
     };
-    console.log(scoreByDay);
+
 
    return (
       <View style={styles.container}>
-        
+        <Text style={{fontWeight: 'bold', fontSize: 30, textAlign: 'center',}}>{this.getMonthName(this.state.currentMonth)}, {this.state.currentYear}</Text>
+        {/*<View style={{flexDirection: 'row', justifyContent:'space-between', marginTop:10}}>
+        <Button
+            icon={{
+              name: 'arrow-bold-left',
+              size: 15,
+              color: 'white',
+              type:'entypo'
+
+            }}
+            title='Prev Month'
+            onPress={()=> this.prevMonth(this.state.currentMonth)}
+            />
+
+            <Button
+                icon={{
+                  name: 'arrow-bold-right',
+                  size: 15,
+                  color: 'white',
+                  type:'entypo'
+
+                }}
+                title='Next Month'
+                onPress={()=> this.nextMonth(this.state.currentMonth)}
+                />
+        </View>/*}
+        {/*}<AreaSpline
+          width={width}
+          height={height}
+          data={this.state.spendingsPerYear}
+          color={Theme.colors[this.state.activeIndex]} /> */}
+
         <ScrollView style={{margin:0, padding:0, flex: 10}}>
         <List containerStyle={{marginBottom: 20}}>
         {
@@ -79,7 +137,7 @@ class MonthlyHistory extends React.Component {
                                 scoreByDay[key]["score"]  == 4 ? Images.image4  :
                                 scoreByDay[key]["score"]  == 3 ? Images.image3  :
                                 scoreByDay[key]["score"]  ==  2 ? Images.image2 :
-                                scoreByDay[key]["score"]  ==  1 ? Images.image1 :
+                                scoreByDay[key]["score"]  ==  1 ? Images. image1 :
                                 Images.image0} />
                    }
                    key={index}

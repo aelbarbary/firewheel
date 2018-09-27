@@ -5,7 +5,8 @@ import { FETCHING_HABITS,
         LOG_HABIT,
         FETCHING_HABITS_LOGS,
         DELETING_HABIT_LOG,
-        FETCHING_HABITS_STATS } from './Constants'
+        FETCHING_HABITS_STATS,
+       ADDING_COMMENT } from './Constants'
 
 import {Firebase, FirebaseRef} from './lib/firebase'
 export function fetchHabitsFromStore() {
@@ -24,30 +25,32 @@ export function fetchHabitsFromStore() {
       var habits = [];
       snapshot.forEach(function(habit) {
         habitObject = habit.val();
-        habitObject.key = habit.key;
-        var totalTimeToday = 0;
-        var overallSpentMinutes = 0 ;
+        if (habitObject.is_active){
+            habitObject.key = habit.key;
+            var totalTimeToday = 0;
+            var overallSpentMinutes = 0 ;
 
-        var habitRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs`);
-        habitRef.on('child_added', function(log) {
-          for (key in log.val()){
-            overallSpentMinutes += log.val()[key].hours * 60 + log.val()[key].minutes;
-          }
-        });
+            var habitRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs`);
+            habitRef.on('child_added', function(log) {
+              for (key in log.val()){
+                overallSpentMinutes += log.val()[key].hours * 60 + log.val()[key].minutes;
+              }
+            });
 
-        const logsRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs/${dateKey}`);
+            const logsRef = FirebaseRef.child(`habits/${UID}/${habit.key}/logs/${dateKey}`);
 
-        logsRef.on('value', (snapshotLog) => {
-          snapshotLog.forEach(function(habitLog) {
+            logsRef.on('value', (snapshotLog) => {
+              snapshotLog.forEach(function(habitLog) {
 
-            totalTimeToday += habitLog.val().hours * 60 + habitLog.val().minutes;
+                totalTimeToday += habitLog.val().hours * 60 + habitLog.val().minutes;
 
-          });
-        });
+              });
+            });
 
-        habitObject.overallSpentMinutes = overallSpentMinutes;
-        habitObject.totalTime = totalTimeToday
-        habits.push(habitObject);
+            habitObject.overallSpentMinutes = overallSpentMinutes;
+            habitObject.totalTime = totalTimeToday
+            habits.push(habitObject);
+        }
       });
 
       return dispatch({
@@ -113,7 +116,6 @@ export function getHabitStatsFromStore() {
           logObject = log.val();
 
           log.getChildren().forEach(function(logEntry){
-
 
           });
 
@@ -188,7 +190,8 @@ export function addHabitToStore(name, time){
 
     ref.push().set({
       name: name,
-      time: time
+      time: time,
+      is_active: true
     });
 
     return ref.on('value', (snapshot) => {
@@ -202,6 +205,28 @@ export function addHabitToStore(name, time){
   }
 }
 
+export function addCommentToStore(comment){
+  return (dispatch) => {
+
+    const UID = Firebase.auth().currentUser.uid;
+    if (!UID)
+      return false;
+
+    var date = new Date();
+    dateKey = formatDate(date);
+
+    const ref = FirebaseRef.child(`comments/${UID}/${dateKey}/`);
+
+    ref.push().set({
+      comment: comment
+    });
+
+    return dispatch({
+      type: ADDING_COMMENT,
+    });
+  }
+}
+
 export function deleteHabitFromStore(key){
   return (dispatch) => {
 
@@ -209,9 +234,12 @@ export function deleteHabitFromStore(key){
     if (!UID)
       return false;
 
-    const ref = FirebaseRef.child(`habits/${UID}`);
+    const ref = FirebaseRef.child(`habits/${UID}/${key}`).update({
+      is_active: false
+    });
 
-    ref.child(key).remove();
+
+    // ref.child(key).remove();
 
     return dispatch({
       type: DELETING_HABIT,
@@ -276,8 +304,6 @@ function formatDate(date) {
 
     return [year, month, day].join('-');
 }
-
-
 
 
 export function getHabits(data) {
